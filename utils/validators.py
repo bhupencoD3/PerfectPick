@@ -17,10 +17,10 @@ class DataValidator:
             CustomException: If input is not a pandas DataFrame.
         """
         if not isinstance(df, pd.DataFrame):
-            logger.error(f"Invalid input type: {type(df)}, expected pandas DataFrame")
+            logger.error({"message": "Invalid input type", "type": str(type(df))})
             raise CustomException("Invalid input", "Input must be a pandas DataFrame")
         self.df = df.copy()
-        logger.debug("DataValidator initialized with DataFrame")
+        logger.debug({"message": "DataValidator initialized with DataFrame"})
 
     def run_all_validations(self, drop_missing=True, chunksize=10000) -> pd.DataFrame:
         """
@@ -36,7 +36,6 @@ class DataValidator:
         try:
             self._validate_columns()
             if chunksize:
-                # Process large DataFrames in chunks
                 chunks = []
                 for chunk in pd.read_csv(self.df if isinstance(self.df, str) else self.df.to_csv(index=False), 
                                         chunksize=chunksize, encoding="utf-8", on_bad_lines="skip"):
