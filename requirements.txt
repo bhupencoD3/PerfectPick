@@ -9,3 +9,15 @@ python-dotenv
 pandas
 flask
 prometheus_client
+pytest
+chardet
+scikit-learn
+astrapy
+transformers
+torch
+rank-bm25
+flask
+bs4
+requests
+selenium
+psycopg2-binary
