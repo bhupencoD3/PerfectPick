@@ -1,4 +1,5 @@
 import pandas as pd
+from io import StringIO
 from utils.logger import get_logger
 from utils.custom_exception import CustomException
 
@@ -37,8 +38,11 @@ class DataValidator:
             self._validate_columns()
             if chunksize:
                 chunks = []
-                for chunk in pd.read_csv(self.df if isinstance(self.df, str) else self.df.to_csv(index=False), 
-                                        chunksize=chunksize, encoding="utf-8", on_bad_lines="skip"):
+                csv_buffer = self.df if isinstance(self.df, str) else StringIO(self.df.to_csv(index=False))
+                for chunk in pd.read_csv(csv_buffer, 
+                                         chunksize=chunksize, 
+                                         encoding="utf-8", 
+                                         on_bad_lines="skip"):
                     chunk = self._validate_chunk(chunk, drop_missing)
                     chunks.append(chunk)
                 self.df = pd.concat(chunks, ignore_index=True) if chunks else pd.DataFrame()
