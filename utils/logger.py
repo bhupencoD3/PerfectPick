@@ -1,38 +1,37 @@
 import logging
-from logging.handlers import RotatingFileHandler
-import os
+import json
+from logging.handlers import QueueHandler
+import queue
+from datetime import datetime
 
-LOG_DIR = "logs"
-os.makedirs(LOG_DIR, exist_ok=True)
-
-def get_logger(name: str, log_file: str = "project.log", level=logging.INFO) -> logging.Logger:
+def get_logger(name: str, level=logging.INFO) -> logging.Logger:
     """
-    Returns a logger instance configured with console and rotating file handlers.
+    Returns a logger instance configured with a thread-safe QueueHandler for cloud environments.
+    Outputs JSON-formatted logs to stdout for cloud monitoring.
     """
     logger = logging.getLogger(name)
     logger.setLevel(level)
-    
+
     if not logger.handlers:
-        # Console handler
+        # Thread-safe queue for concurrent logging
+        log_queue = queue.Queue(-1)  # No size limit
+        queue_handler = QueueHandler(log_queue)
+        logger.addHandler(queue_handler)
+
+        # Console handler (stdout for cloud logging)
         console_handler = logging.StreamHandler()
         console_formatter = logging.Formatter(
-            "[%(asctime)s] [%(levelname)s] [%(name)s]: %(message)s",
+            '{"time": "%(asctime)s", "level": "%(levelname)s", "name": "%(name)s", "message": "%(message)s"}',
             datefmt="%Y-%m-%d %H:%M:%S"
         )
         console_handler.setFormatter(console_formatter)
-        logger.addHandler(console_handler)
         
-        # Rotating file handler
-        file_handler = RotatingFileHandler(
-            os.path.join(LOG_DIR, log_file),
-            maxBytes=5*1024*1024,  # 5 MB
-            backupCount=5
-        )
-        file_formatter = logging.Formatter(
-            "[%(asctime)s] [%(levelname)s] [%(name)s]: %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S"
-        )
-        file_handler.setFormatter(file_formatter)
-        logger.addHandler(file_handler)
-    
+        # Queue listener to process logs from queue to console
+        queue_listener = logging.handlers.QueueListener(log_queue, console_handler)
+        queue_listener.start()
+        
+        # Ensure listener stops cleanly on shutdown
+        import atexit
+        atexit.register(queue_listener.stop)
+
     return logger
