@@ -36,6 +36,12 @@ class DataIngestion:
 
         # Initialize embedding + vector store
         try:
+            Config.validate()
+        except Exception as e:
+            raise CustomException("Config validation failed at DataIngestion init", e)
+
+        try:
+            # Initialize embedding client
             self.embedding = HuggingFaceEndpointEmbeddings(model=Config.EMBEDDING_MODEL)
 
             self.vector_store = AstraDBVectorStore(
