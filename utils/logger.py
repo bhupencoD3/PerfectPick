@@ -1,6 +1,6 @@
 import logging
 import json
-from logging.handlers import QueueHandler, Queue
+from logging.handlers import QueueHandler
 import queue
 from datetime import datetime
 

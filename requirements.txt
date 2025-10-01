@@ -24,3 +24,5 @@ psycopg2-binary
 flask-limiter
 gunicorn
 boto3
+redis
+flask-cors
