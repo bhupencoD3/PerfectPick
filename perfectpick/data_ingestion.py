@@ -7,8 +7,8 @@ from tqdm import tqdm
 from utils.logger import get_logger
 from utils.custom_exception import CustomException
 from utils.validators import DataValidator
-from flipkart.config import Config
-from flipkart.data_converter import DataConverter
+from perfectpick.config import Config
+from perfectpick.data_converter import DataConverter
 
 # LangChain integrations
 from langchain_huggingface import HuggingFaceEndpointEmbeddings

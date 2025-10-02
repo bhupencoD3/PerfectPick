@@ -17,7 +17,7 @@ class Config:
     # === Constants ===
     EMBEDDING_MODEL = "BAAI/bge-base-en-v1.5"
     LLM_MODEL = "llama-3.1-8b-instant"
-    DATA_FILE_PATH = "/app/data/Flipkart_Mobiles.csv"
+    DATA_FILE_PATH = os.getenv("DATA_FILE_PATH", "/app/data/Flipkart_Mobiles_cleaned.csv").strip('"')
 
     # === Environment Variables ===
     ASTRA_DB_API_ENDPOINT = os.getenv("ASTRA_DB_API_ENDPOINT")

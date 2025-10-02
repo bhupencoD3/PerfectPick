@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 from utils.custom_exception import CustomException
-from flipkart.data_ingestion import DataIngestion
+from perfectpick.data_ingestion import DataIngestion
 from utils.logger import get_logger
 
 logger = get_logger(__name__, log_file="recommender.log")

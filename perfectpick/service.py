@@ -2,11 +2,11 @@ import chardet
 import pandas as pd
 from utils.logger import get_logger
 from utils.custom_exception import CustomException
-from flipkart.data_ingestion import DataIngestion
+from perfectpick.data_ingestion import DataIngestion
 
 logger = get_logger(__name__)
 
-class FlipkartRecommendationService:
+class PerfectPickService:
     def __init__(self, file_path="data/Flipkart_Mobiles_cleaned.csv", overwrite=False):
         self.file_path = file_path
         self.overwrite = overwrite
