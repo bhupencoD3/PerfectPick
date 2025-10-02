@@ -369,13 +369,15 @@ def recommend():
             "request_id": request_id,
             "processing_time": processing_time
         }), 500
-    
-@app.route('/health')  # ← ADD THIS RIGHT AFTER
+ 
+@app.route('/health')
+@limiter.exempt
 def simple_health():
     """Simple health check for Kubernetes"""
     return jsonify({"status": "healthy"}), 200
 
 @app.route('/api/health', methods=['GET'])
+@limiter.exempt
 def health():
     """Enhanced health check with comprehensive service status"""
     health_data = {
