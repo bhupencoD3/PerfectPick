@@ -1,10 +1,13 @@
 #!/bin/bash
 
-echo "🚀 Starting PerfectPick deployment..."
+echo "🚀 Starting PerfectPick deployment on Minikube..."
+
+# Set Minikube Docker environment (optional - you might have already done this)
+eval $(minikube docker-env)
 
 # Create namespaces
 kubectl apply -f k8s/namespace.yaml
-kubectl apply -f k8s/namespace.yaml
+kubectl create namespace monitoring
 
 # Deploy application
 kubectl apply -f k8s/configmap.yaml
@@ -29,8 +32,8 @@ kubectl wait --for=condition=ready pod -l app=perfectpick-api -n perfectpick --t
 kubectl wait --for=condition=ready pod -l app=prometheus -n monitoring --timeout=300s
 kubectl wait --for=condition=ready pod -l app=grafana -n monitoring --timeout=300s
 
-# Get NodePorts
-echo "📊 Getting service access information..."
+# Get Minikube IP and NodePorts
+MINIKUBE_IP=$(minikube ip)
 PERFECTPICK_PORT=$(kubectl get svc perfectpick-service -n perfectpick -o jsonpath='{.spec.ports[0].nodePort}')
 GRAFANA_PORT=$(kubectl get svc grafana -n monitoring -o jsonpath='{.spec.ports[0].nodePort}')
 PROMETHEUS_PORT=$(kubectl get svc prometheus -n monitoring -o jsonpath='{.spec.ports[0].nodePort}')
@@ -38,10 +41,9 @@ PROMETHEUS_PORT=$(kubectl get svc prometheus -n monitoring -o jsonpath='{.spec.p
 echo "✅ Deployment completed!"
 echo ""
 echo "🌐 Access URLs:"
-echo "PerfectPick API: http://34.14.203.32:${PERFECTPICK_PORT}"
-echo "PerfectPick Ingress: http://34.14.203.32.nip.io"
-echo "Grafana: http://34.14.203.32:${GRAFANA_PORT} (admin/your-secure-password-here)"
-echo "Prometheus: http://34.14.203.32:${PROMETHEUS_PORT}"
+echo "PerfectPick API: http://${MINIKUBE_IP}:${PERFECTPICK_PORT}"
+echo "Grafana: http://${MINIKUBE_IP}:${GRAFANA_PORT} (admin/your-secure-password-here)"
+echo "Prometheus: http://${MINIKUBE_IP}:${PROMETHEUS_PORT}"
 echo ""
 echo "🔧 To create secrets, run:"
-echo "kubectl apply -f k8s/secret.yaml  # After filling the template with your actual secrets"
+echo "kubectl apply -f k8s/secret.yaml"
