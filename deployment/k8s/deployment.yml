@@ -22,6 +22,7 @@ spec:
       containers:
       - name: perfectpick
         image: bhupencod3v1.0
+        imagePullPolicy: Never
         ports:
         - containerPort: 8000
         env:
