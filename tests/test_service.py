@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from flipkart.service import FlipkartRecommendationService
+from perfectpick.service import FlipkartRecommendationService
 
 @patch("flipkart.service.DataIngestion")
 def test_service_init(mock_ingestion):
