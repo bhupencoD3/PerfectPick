@@ -6,7 +6,7 @@ from unittest.mock import patch, MagicMock
 @patch("flipkart.data_ingestion.AstraDBVectorStore")
 @patch("flipkart.data_ingestion.HuggingFaceEndpointEmbeddings")
 def test_data_ingestion(mock_hf, mock_store, mock_convert, mock_config, tmp_path):
-    from flipkart.data_ingestion import DataIngestion
+    from perfectpick.data_ingestion import DataIngestion
 
     # Set dummy values for Config attributes
     mock_config.ASTRA_DB_API_ENDPOINT = "https://dummy.endpoint"

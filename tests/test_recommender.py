@@ -2,7 +2,7 @@
 
 import pytest
 from unittest.mock import patch, MagicMock
-from flipkart.recommender import Recommender
+from perfectpick.recommender import Recommender
 from utils.custom_exception import CustomException
 
 @patch("flipkart.recommender.DataIngestion")
