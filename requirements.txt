@@ -1,28 +1,50 @@
-langchain
-langchain-astradb
-langchain-huggingface
-langchain-groq
-langchain-community
-datasets
-pypdf
-python-dotenv
-pandas
-flask
-prometheus_client
-pytest
-chardet
-scikit-learn
-astrapy
-transformers
-torch
-rank-bm25
-flask
-bs4
-requests
-selenium
-psycopg2-binary
-flask-limiter
-gunicorn
-boto3
-redis
-flask-cors
+# Core LangChain Ecosystem (Slightly newer but still compatible)
+langchain-core==0.3.76
+langchain-community==0.3.30
+langchain==0.3.27
+langchain-huggingface==0.3.1
+
+# AstraDB Integration (Newer compatible version)
+langchain-astradb==0.6.1
+astrapy==2.1.0
+
+# Groq Integration
+langchain-groq==0.3.8
+
+# Hugging Face & Transformers
+transformers==4.56.2
+datasets==4.1.1
+# CPU-only PyTorch
+torch>=2.4.0,<2.9.0
+sentence-transformers==5.1.1
+
+# Web Framework
+flask==3.1.2
+flask-cors==6.0.1
+flask-limiter==4.0.0
+gunicorn==23.0.0
+
+# Data Processing
+pandas==2.3.3
+numpy==2.3.3
+scikit-learn==1.7.2
+
+# Vector Store & Retrieval
+rank-bm25==0.2.2
+
+# PDF & Document Processing
+pypdf==3.1.0
+chardet==5.2.0
+
+# Database & Storage
+psycopg2-binary==2.9.10
+boto3==1.40.40
+
+# Monitoring & Testing
+prometheus-client==0.23.1
+pytest==8.4.2
+
+# Utilities
+python-dotenv==1.1.1
+requests==2.32.5
+urllib3==2.5.0
