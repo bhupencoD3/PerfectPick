@@ -1,0 +1,12 @@
+# Secrets - ignore specific secret files but allow templates
+k8s/secret.yaml
+k8s/secrets.yaml
+k8s/prod-secret.yaml
+k8s/staging-secret.yaml
+k8s/*.env.yaml
+*.env
+
+# Local files
+.DS_Store
+*.tmp
+*.log
