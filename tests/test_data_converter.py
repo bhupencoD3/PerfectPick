@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from flipkart.data_converter import DataConverter
+from perfectpick.data_converter import DataConverter
 
 @pytest.fixture
 def dummy_csv(tmp_path):
