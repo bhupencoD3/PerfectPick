@@ -10,7 +10,7 @@ def test_config_variables(monkeypatch):
     monkeypatch.setenv("GROQ_API_KEY", "dummy-groq-key")
 
     # Reload config module so Config class picks up env vars
-    from flipkart import config
+    from perfectpick import config
     importlib.reload(config)
     Config = config.Config
 
