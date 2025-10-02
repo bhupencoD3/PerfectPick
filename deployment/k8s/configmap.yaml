@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: perfectpick-app-config
+  namespace: perfectpick
+data:
+  DATA_FILE_PATH: "data/Flipkart_Mobiles_cleaned.csv"
+  HF_HOME: "/app/.cache/huggingface"
+  ASTRA_DB_KEYSPACE: "default_keyspace"
+  ASTRA_DB_COLLECTION_NAME: "flipkart_recommendation"
