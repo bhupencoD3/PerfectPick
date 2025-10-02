@@ -1,16 +1,9 @@
 """
 Entry point to ingest Flipkart mobiles data into the vector store.
-
-Usage:
-    python main.py --file data/Flipkart_Mobiles_cleaned.csv [--overwrite]
-
-Arguments:
-    --file       Path to the CSV file containing Flipkart data (default: data/Flipkart_Mobiles_cleaned.csv)
-    --overwrite  Overwrite existing collection in vector store
 """
 
 import argparse
-from flipkart.service import FlipkartRecommendationService
+from perfectpick.service import PerfectPickService
 from utils.logger import get_logger
 from utils.custom_exception import CustomException
 
@@ -25,7 +18,7 @@ def main():
 
     try:
         logger.info("🚀 Starting Flipkart Recommendation Data Pipeline")
-        service = FlipkartRecommendationService(
+        service = PerfectPickService(
             file_path=args.file,
             overwrite=args.overwrite
         )
