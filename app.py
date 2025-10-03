@@ -109,10 +109,15 @@ def initialize_services():
             retriever = ProductionHybridRetriever(vector_store=vector_store, docs_df=df)
             logger.info("ProductionHybridRetriever initialized")
             
-            # Initialize session memory with connection pooling
+            # Initialize session memory with connection pooling - GRACEFUL FALLBACK
             db_url = os.getenv("DB_URL", Config.DB_URL)
-            memory_db = SessionMemoryDB(db_url, max_load=20)  # Increased for production
-            logger.info("SessionMemoryDB initialized")
+            try:
+                memory_db = SessionMemoryDB(db_url, max_load=20)
+                logger.info("SessionMemoryDB initialized successfully")
+            except Exception as e:
+                logger.error(f"Failed to initialize SessionMemoryDB: {e}")
+                logger.warning("Continuing without session memory functionality - recommendations will work but without memory")
+                memory_db = None  # Set to None to avoid crashes
             
             # Initialize LLM with timeout and retry configuration
             llm = ChatGroq(
@@ -128,7 +133,7 @@ def initialize_services():
             generator = ProductionRAGGenerator(
                 retriever=retriever, 
                 llm=llm, 
-                memory_db=memory_db
+                memory_db=memory_db  # This can be None now
             )
             logger.info("ProductionRAGGenerator initialized")
             
@@ -412,16 +417,31 @@ def health():
             health_data["services"]["generator"] = {"status": "unhealthy"}
             status_code = 503
             
-        # Check memory service
+        # Check memory service - handle None case gracefully
         if memory_db is not None:
-            health_data["services"]["memory"] = {"status": "healthy"}
+            try:
+                # Test memory functionality
+                test_session = "health-check-session"
+                test_memory = memory_db.load_memory(test_session)
+                health_data["services"]["memory"] = {
+                    "status": "healthy",
+                    "session_test": "passed"
+                }
+            except Exception as e:
+                health_data["services"]["memory"] = {
+                    "status": "degraded",
+                    "error": str(e)
+                }
         else:
-            health_data["services"]["memory"] = {"status": "unhealthy"}
-            status_code = 503
+            health_data["services"]["memory"] = {
+                "status": "disabled",
+                "message": "Session memory not available"
+            }
+            # Don't mark as unhealthy if memory is disabled
             
         # Overall status
         unhealthy_services = [svc for svc, status in health_data["services"].items() 
-                            if status["status"] != "healthy"]
+                            if status["status"] not in ["healthy", "disabled"]]
         if unhealthy_services:
             health_data["status"] = "degraded" if status_code == 200 else "unhealthy"
             
@@ -478,8 +498,8 @@ def shutdown_handler(signum, frame):
     
     try:
         if memory_db:
-            memory_db.close()
-            logger.info("Memory DB connection closed")
+            memory_db.close_pool()
+            logger.info("Memory DB connection pool closed")
     except Exception as e:
         logger.warning(f"Failed to close memory DB: {e}")
     
