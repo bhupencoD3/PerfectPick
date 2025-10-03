@@ -20,7 +20,7 @@ class SearchResult:
 
 class ProductionHybridRetriever:
     def __init__(self, vector_store, docs_df: pd.DataFrame, 
-                 reranker_model: str = "BAAI/bge-reranker-small",
+                 reranker_model: str = "BAAI/bge-reranker-v2-m3",
                  bm25_weight: float = 0.4,
                  semantic_weight: float = 0.6):
         """
