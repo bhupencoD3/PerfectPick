@@ -13,9 +13,13 @@ spec:
       labels:
         app: grafana
     spec:
+      securityContext:  # ADDED: Security context
+        runAsUser: 472
+        runAsGroup: 472
+        fsGroup: 472
       containers:
       - name: grafana
-        image: grafana/grafana:10.0.0
+        image: grafana/grafana:9.5.0  # CHANGED: Use stable version
         ports:
         - name: http
           containerPort: 3000
@@ -27,6 +31,10 @@ spec:
             secretKeyRef:
               name: grafana-secret
               key: admin-password
+        - name: GF_SECURITY_ALLOW_EMBEDDING  # ADDED: Fix loading issues
+          value: "true"
+        - name: GF_SECURITY_CONTENT_SECURITY_POLICY  # ADDED: Disable strict CSP
+          value: "false"
         volumeMounts:
         - name: grafana-storage
           mountPath: /var/lib/grafana
