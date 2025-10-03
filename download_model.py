@@ -9,7 +9,7 @@ print(f'Cache directory: {os.getenv("HF_HOME")}')
 try:
     # Download and cache the model
     model = AutoModelForSequenceClassification.from_pretrained(
-        'BAAI/bge-reranker-v2-m3',
+        'BAAI/bge-reranker-base',
         cache_dir=os.getenv('HF_HOME'),
         local_files_only=False,
         force_download=False
