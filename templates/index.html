@@ -316,7 +316,7 @@
         <!-- Enhanced Header -->
         <header class="text-center mb-16">
             <div class="flex items-center justify-center mb-6">
-                <div class="feature-icon mr-3" style="box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);">
+                <div class="feature-icon mr-3" style="box-shadow: 0 8px-25px rgba(99, 102, 241, 0.4);">
                     <i class="fas fa-magic text-white text-xl"></i>
                 </div>
                 <h1 class="text-5xl md:text-6xl font-bold gradient-text">PerfectPick</h1>
@@ -372,15 +372,26 @@
                             aria-label="Enter your phone query"
                         />
                     </div>
-                    <button
-                        id="submitButton"
-                        class="gradient-button text-white font-semibold py-5 px-10 rounded-2xl focus:outline-none focus:ring-3 focus:ring-indigo-500 flex items-center text-lg"
-                        onclick="fetchRecommendations()"
-                        aria-label="Get recommendations"
-                    >
-                        <i class="fas fa-robot mr-3"></i>
-                        Find Phones
-                    </button>
+                    <div class="flex gap-4">
+                        <button
+                            id="submitButton"
+                            class="gradient-button text-white font-semibold py-5 px-8 rounded-2xl focus:outline-none focus:ring-3 focus:ring-indigo-500 flex items-center text-lg"
+                            onclick="fetchRecommendations()"
+                            aria-label="Get recommendations"
+                        >
+                            <i class="fas fa-robot mr-3"></i>
+                            Find Phones
+                        </button>
+                        <button
+                            id="clearSessionButton"
+                            class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-5 px-6 rounded-2xl focus:outline-none focus:ring-3 focus:ring-gray-500 flex items-center text-lg transition-all duration-300"
+                            onclick="clearSession()"
+                            aria-label="Clear conversation history"
+                        >
+                            <i class="fas fa-history mr-2"></i>
+                            Clear History
+                        </button>
+                    </div>
                 </div>
                 
                 <!-- Enhanced Quick Suggestions -->
@@ -466,7 +477,56 @@
     </footer>
 
     <script>
-        // ... (keep all your existing JavaScript functions exactly as they were)
+        // Session management
+        let currentSessionId = localStorage.getItem('perfectpick_session_id');
+
+        // Function to get or create session ID
+        function getSessionId() {
+            if (!currentSessionId) {
+                currentSessionId = generateSessionId();
+                localStorage.setItem('perfectpick_session_id', currentSessionId);
+            }
+            return currentSessionId;
+        }
+
+        // Function to generate session ID
+        function generateSessionId() {
+            return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+        }
+
+        // Function to clear session from both frontend and backend
+        async function clearSession() {
+            const sessionIdToClear = localStorage.getItem('perfectpick_session_id');
+            
+            try {
+                // Call backend API to clear session from PostgreSQL
+                if (sessionIdToClear) {
+                    const response = await fetch(`/api/session/${sessionIdToClear}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        console.log('Session cleared from PostgreSQL');
+                    } else {
+                        console.warn('Failed to clear session from server, but continuing...');
+                    }
+                }
+                
+                // Clear frontend storage
+                localStorage.removeItem('perfectpick_session_id');
+                currentSessionId = null;
+                showNotification('Conversation history cleared completely', 'success');
+                
+            } catch (error) {
+                console.error('Error clearing session:', error);
+                showNotification('Error clearing history from server', 'error');
+                
+                // Still clear frontend even if backend fails
+                localStorage.removeItem('perfectpick_session_id');
+                currentSessionId = null;
+            }
+        }
+
         // Set suggestion function
         function setSuggestion(text) {
             document.getElementById('queryInput').value = text;
@@ -538,10 +598,15 @@
             const loadingInterval = simulateLoading();
 
             try {
+                const sessionId = getSessionId(); // Get the persistent session ID
+                
                 const response = await fetch('/api/recommend', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query })
+                    body: JSON.stringify({ 
+                        query: query,
+                        session_id: sessionId  // Include the session ID
+                    })
                 });
 
                 if (!response.ok) {
@@ -556,7 +621,8 @@
                 submitButton.disabled = false;
                 submitButton.innerHTML = '<i class="fas fa-robot mr-2"></i> Find Phones';
 
-                console.log('API Response:', data); // Debug log
+                console.log('API Response:', data);
+                console.log('Session ID:', sessionId);
 
                 if (!data.answer || data.answer.trim() === '') {
                     resultsDiv.innerHTML = `
@@ -588,7 +654,7 @@
         }
 
         function displayCardResults(answer, container) {
-            console.log('Raw answer:', answer); // Debug log
+            console.log('Raw answer:', answer);
             
             // Clean up the answer
             let cleanAnswer = answer
@@ -602,12 +668,12 @@
 
             const lines = cleanAnswer.split('\n').filter(line => line.trim());
             
-            console.log('Cleaned lines:', lines); // Debug log
+            console.log('Cleaned lines:', lines);
             
             let html = '';
             let phoneCount = 0;
 
-            // NEW: Parse cards that are on single lines
+            // Parse cards that are on single lines
             const cardRegex = /┌─ PHONE CARD ─+┐(.*?)└─+┘/gs;
             const cards = [];
             let match;
@@ -628,7 +694,7 @@
                 }
             }
 
-            console.log('Cards found:', cards.length, cards); // Debug log
+            console.log('Cards found:', cards.length, cards);
 
             if (cards.length > 0) {
                 // Display cards in a grid
@@ -651,7 +717,7 @@
                     html += createPhoneCardFromLines(cardLines, phoneCount, index);
                 });
 
-                html += '</div>'; // Close grid
+                html += '</div>';
 
             } else {
                 // Fallback to other parsing methods
