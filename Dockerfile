@@ -41,36 +41,14 @@ RUN mkdir -p ${HF_HOME} && chown -R appuser:appuser ${HF_HOME}
 # Switch to appuser for model download
 USER appuser
 
-# Pre-download the BGE reranker model (this will take 5-10 minutes)
-RUN python -c "\
-import os\n\
-import sys\n\
-from transformers import AutoModelForSequenceClassification, AutoTokenizer\n\
-\n\
-print('🚀 Starting BGE reranker model pre-download...')\n\
-print(f'Cache directory: {os.getenv(\\\"HF_HOME\\\")}')\n\
-\n\
-try:\n\
-    # Download and cache the model\n\
-    model = AutoModelForSequenceClassification.from_pretrained(\n\
-        'BAAI/bge-reranker-v2-m3',\n\
-        cache_dir=os.getenv('HF_HOME'),\n\
-        local_files_only=False,\n\
-        force_download=False  # Use cached if available\n\
-    )\n\
-    print('✅ BGE reranker model downloaded successfully!')\n\
-    \n\
-    # Also download tokenizer\n\
-    tokenizer = AutoTokenizer.from_pretrained(\n\
-        'BAAI/bge-reranker-v2-m3', \n\
-        cache_dir=os.getenv('HF_HOME')\n\
-    )\n\
-    print('✅ BGE reranker tokenizer downloaded successfully!')\n\
-    \n\
-except Exception as e:\n\
-    print(f'❌ Model download failed: {e}')\n\
-    sys.exit(1)\n\
-"
+# Copy and run the download script
+COPY download_model.py .
+
+# Pre-download the BGE reranker model
+RUN python download_model.py
+
+# Clean up the script (optional)
+RUN rm download_model.py
 
 # Verify model was downloaded
 RUN echo "📦 Verifying downloaded models:" && \
