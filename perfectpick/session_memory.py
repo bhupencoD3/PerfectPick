@@ -2,179 +2,188 @@ import json
 from collections import deque
 import psycopg2
 from psycopg2.extras import Json
+from psycopg2.pool import SimpleConnectionPool
 from utils.logger import get_logger
 import atexit
 import time
 import socket
 from urllib.parse import urlparse
 import os
+import threading
 
 logger = get_logger(__name__)
 
 class SessionMemoryDB:
-    def __init__(self, db_url, max_load=10, max_retries=3, retry_delay=2):
+    def __init__(self, db_url, max_load=10, max_retries=3, retry_delay=2, pool_size=5):
         self.db_url = db_url
         self.max_load = max_load
         self.max_retries = max_retries
         self.retry_delay = retry_delay
-        self.client = None
-
-        atexit.register(self.close)
-        self._connect()
+        self.pool = None
+        self._lock = threading.Lock()
+        
+        self._init_pool()
         self._init_db()
+        atexit.register(self.close_pool)
 
-    def _resolve_with_public_dns(self, hostname):
-        """Resolve hostname using public DNS servers."""
-        dns_servers = ['8.8.8.8', '1.1.1.1', '8.8.4.4']  # Google DNS, Cloudflare DNS
-        
-        for dns_server in dns_servers:
-            try:
-                # Use nslookup via subprocess as a fallback
-                import subprocess
-                result = subprocess.run(
-                    ['nslookup', hostname, dns_server], 
-                    capture_output=True, 
-                    text=True, 
-                    timeout=5
-                )
-                if result.returncode == 0:
-                    for line in result.stdout.split('\n'):
-                        if 'Address:' in line and not '#' in line:
-                            ip = line.split('Address:')[1].strip()
-                            if ip and ip != dns_server:
-                                logger.info(f"Resolved {hostname} to {ip} via {dns_server}")
-                                return ip
-            except:
-                continue
-        
-        # Fallback to system DNS
+    def _init_pool(self):
+        """Initialize connection pool"""
         try:
-            return socket.gethostbyname(hostname)
-        except:
-            raise Exception(f"Could not resolve {hostname}")
-
-    def _connect_with_ip(self, parsed_url):
-        """Connect using IP address instead of hostname."""
-        hostname = parsed_url.hostname
-        port = parsed_url.port or 5432
-        
-        try:
-            # Try to resolve to IP
-            ip_address = self._resolve_with_public_dns(hostname)
-            logger.info(f"Using IP address: {ip_address}")
+            parsed = urlparse(self.db_url)
             
-            # Build connection with IP
+            # Connection parameters for pool
             conn_params = {
-                'dbname': parsed_url.path[1:] or 'postgres',
-                'user': parsed_url.username,
-                'password': parsed_url.password,
-                'host': ip_address,
-                'port': port,
+                'dbname': parsed.path[1:] or 'postgres',
+                'user': parsed.username,
+                'password': parsed.password,
+                'host': parsed.hostname,
+                'port': parsed.port or 5432,
                 'connect_timeout': 10,
                 'sslmode': 'require'
             }
             
-            return psycopg2.connect(**conn_params)
+            self.pool = SimpleConnectionPool(
+                minconn=1,
+                maxconn=5,  # Reduced for Supabase limits
+                **conn_params
+            )
+            logger.info("✅ PostgreSQL connection pool initialized")
+            
         except Exception as e:
-            logger.error(f"IP connection failed: {e}")
+            logger.error(f"Failed to initialize connection pool: {e}")
             raise
 
-    def _connect(self):
-        """Connect to PostgreSQL with DNS fallback."""
-        parsed = urlparse(self.db_url)
-        last_error = None
-        
+    def _get_connection(self):
+        """Get connection from pool with retry logic"""
         for attempt in range(1, self.max_retries + 1):
             try:
-                logger.info(f"Attempt {attempt}/{self.max_retries} connecting to PostgreSQL")
-                
-                # First try direct connection
-                try:
-                    self.client = psycopg2.connect(self.db_url, connect_timeout=10)
-                except Exception as direct_error:
-                    logger.warning(f"Direct connection failed, trying IP connection: {direct_error}")
-                    # If direct fails, try IP connection
-                    self.client = self._connect_with_ip(parsed)
-                
-                # Test the connection
-                cursor = self.client.cursor()
+                conn = self.pool.getconn()
+                # Test connection
+                cursor = conn.cursor()
                 cursor.execute("SELECT 1")
                 cursor.close()
-                
-                logger.info("✅ Connected to PostgreSQL successfully")
-                return
-                
-            except psycopg2.OperationalError as e:
-                last_error = e
+                return conn
+            except (psycopg2.InterfaceError, psycopg2.OperationalError) as e:
+                logger.warning(f"Connection attempt {attempt} failed: {e}")
                 if attempt < self.max_retries:
-                    wait_time = self.retry_delay * (2 ** (attempt - 1))
-                    logger.warning(f"Connection failed, retrying in {wait_time}s: {e}")
-                    time.sleep(wait_time)
+                    time.sleep(self.retry_delay * attempt)
                 else:
-                    logger.error(f"❌ All connection attempts failed: {e}")
-                    raise last_error
+                    raise e
             except Exception as e:
-                last_error = e
-                logger.error(f"Unexpected error: {e}")
+                logger.error(f"Unexpected error getting connection: {e}")
                 raise
 
-    def _init_db(self):
-        """Initialize PostgreSQL table for session memory."""
+    def _return_connection(self, conn):
+        """Return connection to pool"""
         try:
-            with self.client.cursor() as c:
-                c.execute("""
-                    CREATE TABLE IF NOT EXISTS session_memory (
-                        session_id TEXT PRIMARY KEY,
-                        memory JSONB,
-                        updated_at TIMESTAMP DEFAULT NOW()
-                    )
-                """)
-            self.client.commit()
+            if conn and not conn.closed:
+                self.pool.putconn(conn)
+        except Exception as e:
+            logger.warning(f"Failed to return connection to pool: {e}")
+
+    def _execute_with_connection(self, operation, params=None):
+        """Execute operation with managed connection"""
+        conn = None
+        try:
+            conn = self._get_connection()
+            with conn.cursor() as cursor:
+                if params:
+                    cursor.execute(operation, params)
+                else:
+                    cursor.execute(operation)
+                conn.commit()
+                
+                # For SELECT operations, return results
+                if operation.strip().upper().startswith('SELECT'):
+                    return cursor.fetchall()
+                return True
+                
+        except (psycopg2.InterfaceError, psycopg2.OperationalError) as e:
+            logger.error(f"Database operation failed: {e}")
+            if conn:
+                try:
+                    conn.rollback()
+                except:
+                    pass
+            raise
+        except Exception as e:
+            logger.error(f"Unexpected database error: {e}")
+            if conn:
+                try:
+                    conn.rollback()
+                except:
+                    pass
+            raise
+        finally:
+            if conn:
+                self._return_connection(conn)
+
+    def _init_db(self):
+        """Initialize PostgreSQL table for session memory"""
+        try:
+            self._execute_with_connection("""
+                CREATE TABLE IF NOT EXISTS session_memory (
+                    session_id TEXT PRIMARY KEY,
+                    memory JSONB,
+                    updated_at TIMESTAMP DEFAULT NOW()
+                )
+            """)
             logger.info("✅ Session memory table initialized")
         except Exception as e:
             logger.error(f"Failed to initialize DB: {e}")
-            self.client.rollback()
-            raise
+            # Don't raise, continue without table
 
     def load_memory(self, session_id):
-        """Load conversation history for a session_id."""
+        """Load conversation history for a session_id"""
         try:
-            with self.client.cursor() as c:
-                c.execute("SELECT memory FROM session_memory WHERE session_id = %s", (session_id,))
-                row = c.fetchone()
-                if row:
-                    mem_list = row[0] or []
-                    if self.max_load is not None:
-                        mem_list = mem_list[-self.max_load:]
-                    return deque(mem_list, maxlen=self.max_load)
-                return deque(maxlen=self.max_load)
+            results = self._execute_with_connection(
+                "SELECT memory FROM session_memory WHERE session_id = %s", 
+                (session_id,)
+            )
+            
+            if results and results[0] and results[0][0]:
+                mem_list = results[0][0]
+                if self.max_load is not None:
+                    mem_list = mem_list[-self.max_load:]
+                logger.debug(f"Loaded {len(mem_list)} memory entries for session {session_id}")
+                return deque(mem_list, maxlen=self.max_load)
+            logger.debug(f"No memory found for session {session_id}")
+            return deque(maxlen=self.max_load)
+            
         except Exception as e:
             logger.error(f"Failed to load memory for {session_id}: {e}")
             return deque(maxlen=self.max_load)
 
     def save_memory(self, session_id, memory_deque):
-        """Save conversation history for a session_id."""
+        """Save conversation history for a session_id"""
+        if not memory_deque:
+            logger.debug(f"No memory to save for session {session_id}")
+            return False
+            
         mem_list = list(memory_deque)
         try:
-            with self.client.cursor() as c:
-                c.execute("""
-                    INSERT INTO session_memory (session_id, memory, updated_at)
-                    VALUES (%s, %s, NOW())
-                    ON CONFLICT (session_id) DO UPDATE
-                    SET memory = EXCLUDED.memory, updated_at = NOW()
-                """, (session_id, Json(mem_list)))
-            self.client.commit()
-            logger.debug(f"Saved memory for session {session_id}")
+            success = self._execute_with_connection("""
+                INSERT INTO session_memory (session_id, memory, updated_at)
+                VALUES (%s, %s, NOW())
+                ON CONFLICT (session_id) DO UPDATE
+                SET memory = EXCLUDED.memory, updated_at = NOW()
+            """, (session_id, Json(mem_list)))
+            
+            if success:
+                logger.debug(f"Saved {len(mem_list)} memory entries for session {session_id}")
+            else:
+                logger.warning(f"Memory save returned False for session {session_id}")
+            return success
+            
         except Exception as e:
             logger.error(f"Failed to save memory for {session_id}: {e}")
-            self.client.rollback()
-            raise
+            return False
 
-    def close(self):
-        """Close persistent connection."""
+    def close_pool(self):
+        """Close connection pool"""
         try:
-            if self.client and not self.client.closed:
-                self.client.close()
-                logger.info("✅ PostgreSQL connection closed")
+            if self.pool:
+                self.pool.closeall()
+                logger.info("✅ PostgreSQL connection pool closed")
         except Exception as e:
-            logger.warning(f"Failed to close PostgreSQL connection: {e}")
+            logger.warning(f"Failed to close connection pool: {e}")
