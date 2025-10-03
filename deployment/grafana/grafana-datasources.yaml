@@ -4,7 +4,7 @@ metadata:
   name: grafana-datasources
   namespace: monitoring
 data:
-  prometheus.yaml: |
+  datasources.yaml: |  
     apiVersion: 1
     datasources:
     - name: Prometheus
