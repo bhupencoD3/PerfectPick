@@ -42,34 +42,34 @@ RUN mkdir -p ${HF_HOME} && chown -R appuser:appuser ${HF_HOME}
 USER appuser
 
 # Pre-download the BGE reranker model (this will take 5-10 minutes)
-RUN python -c "
-import os
-import sys
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
-
-print('🚀 Starting BGE reranker model pre-download...')
-print(f'Cache directory: {os.getenv(\\\"HF_HOME\\\")}')
-
-try:
-    # Download and cache the model
-    model = AutoModelForSequenceClassification.from_pretrained(
-        'BAAI/bge-reranker-v2-m3',
-        cache_dir=os.getenv('HF_HOME'),
-        local_files_only=False,
-        force_download=False  # Use cached if available
-    )
-    print('✅ BGE reranker model downloaded successfully!')
-    
-    # Also download tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(
-        'BAAI/bge-reranker-v2-m3', 
-        cache_dir=os.getenv('HF_HOME')
-    )
-    print('✅ BGE reranker tokenizer downloaded successfully!')
-    
-except Exception as e:
-    print(f'❌ Model download failed: {e}')
-    sys.exit(1)
+RUN python -c "\
+import os\n\
+import sys\n\
+from transformers import AutoModelForSequenceClassification, AutoTokenizer\n\
+\n\
+print('🚀 Starting BGE reranker model pre-download...')\n\
+print(f'Cache directory: {os.getenv(\\\"HF_HOME\\\")}')\n\
+\n\
+try:\n\
+    # Download and cache the model\n\
+    model = AutoModelForSequenceClassification.from_pretrained(\n\
+        'BAAI/bge-reranker-v2-m3',\n\
+        cache_dir=os.getenv('HF_HOME'),\n\
+        local_files_only=False,\n\
+        force_download=False  # Use cached if available\n\
+    )\n\
+    print('✅ BGE reranker model downloaded successfully!')\n\
+    \n\
+    # Also download tokenizer\n\
+    tokenizer = AutoTokenizer.from_pretrained(\n\
+        'BAAI/bge-reranker-v2-m3', \n\
+        cache_dir=os.getenv('HF_HOME')\n\
+    )\n\
+    print('✅ BGE reranker tokenizer downloaded successfully!')\n\
+    \n\
+except Exception as e:\n\
+    print(f'❌ Model download failed: {e}')\n\
+    sys.exit(1)\n\
 "
 
 # Verify model was downloaded
