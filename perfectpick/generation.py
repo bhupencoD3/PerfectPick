@@ -46,19 +46,23 @@ class EnhancedSessionMemoryManager:
             return deque(maxlen=self.memory_size)
     
     def save_memory(self, session_id: str, memory: deque) -> bool:
-        """Save session memory with validation"""
+        """Save session memory with validation and error recovery"""
         try:
             if self.memory_db and memory:
                 # Validate memory size
-                if len(memory) > self.memory_size * 2:  # Prevent memory bloat
+                if len(memory) > self.memory_size * 2:
                     memory = deque(list(memory)[-self.memory_size:], maxlen=self.memory_size)
                 
-                self.memory_db.save_memory(session_id, memory)
-                logger.debug(f"Saved {len(memory)} entries for session {session_id}")
-                return True
+                success = self.memory_db.save_memory(session_id, memory)
+                if success:
+                    logger.debug(f"Saved {len(memory)} entries for session {session_id}")
+                else:
+                    logger.warning(f"Memory save returned False for session {session_id}")
+                return success
             return False
         except Exception as e:
             logger.error(f"Memory save failed for {session_id}: {e}")
+            # Don't crash the application if memory saving fails
             return False
 
 class EnhancedQueryResolver:
@@ -268,7 +272,6 @@ class ProductionRAGGenerator:
         
         logger.info(f"ProductionRAGGenerator initialized with {len(self.valid_models)} models")
     
-    # In the _init_prompt_templates method, update the system prompt:
     def _init_prompt_templates(self):
         """Initialize enhanced system prompts with CARD formatting"""
         self.system_prompt = """You are an expert Flipkart mobile assistant. Provide responses in CARD format.
@@ -504,7 +507,7 @@ class ProductionRAGGenerator:
             
             logger.info(f"Generation START: '{query}' (session: {session_id})")
             
-            # Load session memory
+            # Load session memory - this will work even if memory_db is None
             session_memory = self.memory_manager.load_memory(session_id)
             
             # Resolve query with context
@@ -524,7 +527,7 @@ class ProductionRAGGenerator:
                 answer = self._validate_and_format_response(answer)
                 sources = self._extract_sources(contexts)
             
-            # Update session memory
+            # Update session memory - this will fail gracefully if memory_db is None
             if session_id and answer:
                 self._update_memory(session_id, query, answer, session_memory)
             
@@ -618,7 +621,7 @@ class ProductionRAGGenerator:
             memory_entry = f"Q: {query} | A: {answer}"
             session_memory.append(memory_entry)
             
-            # Save memory
+            # Save memory - this will fail gracefully if memory_db is None
             success = self.memory_manager.save_memory(session_id, session_memory)
             if success:
                 logger.debug(f"Updated memory for session {session_id}")
