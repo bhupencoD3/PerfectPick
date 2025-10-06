@@ -14,9 +14,9 @@ import sys
 import time
 from datetime import datetime
 
-# Import your production grade modules
+# Import your production grade modules 
 from perfectpick.retrieval import ProductionHybridRetriever
-from perfectpick.generation import ProductionRAGGenerator
+from perfectpick.generation import DualModeRAGGenerator  
 from perfectpick.session_memory import SessionMemoryDB
 from langchain_groq import ChatGroq
 
@@ -34,18 +34,18 @@ logger = get_logger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['JSON_SORT_KEYS'] = False  # Maintain response order
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max request size
+app.config['JSON_SORT_KEYS'] = False
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 CORS(app)
 
-# Rate limiting with better configuration
+# Rate limiting
 limiter = Limiter(
     app=app,
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"],
-    storage_uri="memory://",  # For production, consider Redis
-    strategy="fixed-window"  # More predictable than moving-window
+    storage_uri="memory://",
+    strategy="fixed-window"
 )
 
 # Global variables for service instances
@@ -62,20 +62,16 @@ def initialize_services():
     global service, vector_store, df, retriever, memory_db, llm, generator
     
     max_retries = 3
-    retry_delay = 2  # seconds
+    retry_delay = 2
     
     for attempt in range(max_retries):
         try:
             logger.info(f"Initializing services (attempt {attempt + 1}/{max_retries})...")
             
-            # Validate configuration first
             Config.validate()
             
-            # File path with fallback options
             file_path = os.getenv("DATA_FILE_PATH", "data/Flipkart_Mobiles_cleaned.csv").strip('"')
-            fallback_paths = [
-                file_path
-            ]
+            fallback_paths = [file_path]
             
             data_file = None
             for path in fallback_paths:
@@ -87,11 +83,9 @@ def initialize_services():
             if not data_file:
                 raise FileNotFoundError(f"No data file found in: {fallback_paths}")
             
-            # Initialize services
             service = PerfectPickService(file_path=data_file, overwrite=False)
             vector_store = service.vector_store
             
-            # Load data with encoding fallbacks
             encodings = ['utf-8', 'latin-1', 'iso-8859-1', 'cp1252']
             for encoding in encodings:
                 try:
@@ -105,37 +99,34 @@ def initialize_services():
             
             logger.info(f"Data loaded successfully: {df.shape} rows, {len(df['Model'].unique())} unique models")
             
-            # Initialize production-grade retriever
             retriever = ProductionHybridRetriever(vector_store=vector_store, docs_df=df)
             logger.info("ProductionHybridRetriever initialized")
             
-            # Initialize session memory with connection pooling - GRACEFUL FALLBACK
             db_url = os.getenv("DB_URL", Config.DB_URL)
             try:
                 memory_db = SessionMemoryDB(db_url, max_load=20)
                 logger.info("SessionMemoryDB initialized successfully")
             except Exception as e:
                 logger.error(f"Failed to initialize SessionMemoryDB: {e}")
-                logger.warning("Continuing without session memory functionality - recommendations will work but without memory")
-                memory_db = None  # Set to None to avoid crashes
+                logger.warning("Continuing without session memory functionality")
+                memory_db = None
             
-            # Initialize LLM with timeout and retry configuration
             llm = ChatGroq(
                 api_key=Config.GROQ_API_KEY, 
                 model=Config.LLM_MODEL, 
                 temperature=0.3,
-                timeout=30,  # 30 second timeout
+                timeout=30,
                 max_retries=2
             )
             logger.info("LLM initialized")
             
-            # Initialize production-grade generator
-            generator = ProductionRAGGenerator(
+            # CHANGED: Initialize DUAL MODE generator
+            generator = DualModeRAGGenerator(
                 retriever=retriever, 
                 llm=llm, 
-                memory_db=memory_db  # This can be None now
+                memory_db=memory_db
             )
-            logger.info("ProductionRAGGenerator initialized")
+            logger.info("✅ DualModeRAGGenerator initialized with card/explanation modes")
             
             logger.info("✅ All services initialized successfully")
             return True
@@ -145,52 +136,48 @@ def initialize_services():
             if attempt < max_retries - 1:
                 logger.info(f"Retrying in {retry_delay} seconds...")
                 time.sleep(retry_delay)
-                retry_delay *= 2  # Exponential backoff
+                retry_delay *= 2
             else:
                 logger.error("All service initialization attempts failed")
                 return False
 
 def extract_price_from_query(query: str) -> Optional[float]:
-    """Extract price from query with multiple format support - FIXED for lakh"""
+    """Extract price from query with multiple format support"""
     query_lower = query.lower()
     
-    # Pattern 1: "under 1 lakh", "below 2 lac"
     pattern1 = r'(under|below|less than|upto|within)\s*[₹]?\s*(\d+[.,]?\d*)\s*(lakh|lac|L|Lakh)'
     match1 = re.search(pattern1, query_lower)
     if match1:
         try:
             price_str = match1.group(2).replace(',', '').replace('.', '')
-            price = float(price_str) * 100000  # Convert lakh to actual amount
+            price = float(price_str) * 100000
             logger.info(f"Extracted LAKH price: ₹{price:,.0f}")
             return price
         except (ValueError, IndexError):
             pass
     
-    # Pattern 2: "1 lakh phones", "2 lac budget"
     pattern2 = r'\b(\d+[.,]?\d*)\s*(lakh|lac|L|Lakh)\b'
     match2 = re.search(pattern2, query_lower)
     if match2:
         try:
             price_str = match2.group(1).replace(',', '').replace('.', '')
-            price = float(price_str) * 100000  # Convert lakh to actual amount
+            price = float(price_str) * 100000
             logger.info(f"Extracted LAKH price: ₹{price:,.0f}")
             return price
         except (ValueError, IndexError):
             pass
     
-    # Pattern 3: "under 20k", "below 15k"
     pattern3 = r'(under|below|less than|upto|within)\s*[₹]?\s*(\d+[.,]?\d*)(k|K|thousand)'
     match3 = re.search(pattern3, query_lower)
     if match3:
         try:
             price_str = match3.group(2).replace(',', '').replace('.', '')
-            price = float(price_str) * 1000  # Convert k to actual amount
+            price = float(price_str) * 1000
             logger.info(f"Extracted THOUSAND price: ₹{price:,.0f}")
             return price
         except (ValueError, IndexError):
             pass
     
-    # Pattern 4: "20k phones", "15k budget"
     pattern4 = r'\b(\d+)\s*(k|K)\b'
     match4 = re.search(pattern4, query_lower)
     if match4:
@@ -201,7 +188,6 @@ def extract_price_from_query(query: str) -> Optional[float]:
         except (ValueError, IndexError):
             pass
     
-    # Pattern 5: "under 20000", "below 15000"
     pattern5 = r'(under|below|less than|upto|within)\s*[₹]?\s*(\d+[.,]?\d*)'
     match5 = re.search(pattern5, query_lower)
     if match5:
@@ -216,48 +202,39 @@ def extract_price_from_query(query: str) -> Optional[float]:
     return None
 
 def process_query(query: str) -> str:
-    """
-    Enhanced query processing for better retrieval - SIMPLIFIED
-    """
+    """Enhanced query processing for better retrieval"""
     if not query or not query.strip():
         return query
     
-    # Handle very long queries
     if len(query) > 300:
         query = query[:300]
         logger.info("Query truncated to 300 characters")
     
-    # For price queries, don't over-process - keep them simple
     price = extract_price_from_query(query)
     if price:
         logger.info(f"Price query detected (₹{price:,.0f}), keeping original: {query}")
         return query
     
-    if len(query.split()) <= 8:  # Short queries don't need processing
+    if len(query.split()) <= 8:
         return query
     
     logger.debug(f"Processing query: {query[:100]}...")
     
-    # Extract key components
     keywords = []
     
-    # Brand detection
     common_brands = ['samsung', 'oneplus', 'xiaomi', 'oppo', 'vivo', 'realme', 'apple', 'google', 'asus', 'poco', 'iqoo', 'nokia', 'motorola']
     for brand in common_brands:
         if brand in query.lower():
             keywords.append(brand)
     
-    # RAM requirements
     ram_match = re.search(r"(\d+)\s*(GB|gb)\s*(RAM|ram)", query.lower())
     if ram_match:
         keywords.append(f"{ram_match.group(1)}gb ram")
     
-    # Storage requirements
     storage_match = re.search(r"(\d+)\s*(GB|gb)\s*(storage|rom)", query.lower())
     if storage_match:
         keywords.append(f"{storage_match.group(1)}gb storage")
     
-    # Use cases
     for term in ['gaming', 'camera', 'battery', 'performance', 'budget', 'premium']:
         if term in query.lower():
             keywords.append(term)
@@ -271,13 +248,12 @@ def process_query(query: str) -> str:
 @app.before_request
 def before_request():
     """Log request details"""
-    if request.path != '/api/health':  # Skip health checks
+    if request.path != '/api/health':
         logger.info(f"Incoming request: {request.method} {request.path}")
 
 @app.after_request
 def after_request(response):
     """Log response details and add security headers"""
-    # Add security headers
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
     response.headers['X-XSS-Protection'] = '1; mode=block'
@@ -295,12 +271,11 @@ def index():
 @app.route('/api/recommend', methods=['POST'])
 @limiter.limit("10 per minute")
 def recommend():
-    """Main recommendation endpoint"""
+    """Main recommendation endpoint with dual mode support"""
     start_time = time.time()
     request_id = str(uuid.uuid4())[:8]
     
     try:
-        # Validate request
         if not request.is_json:
             logger.warning(f"[{request_id}] Invalid content type")
             return jsonify({
@@ -322,17 +297,16 @@ def recommend():
         
         logger.info(f"[{request_id}] Request: '{query}' (session={session_id})")
 
-        # Handle empty query
         if not query:
             return jsonify({
                 "answer": "Please provide a specific question about mobile phones.\n\nExamples:\n- Phones under ₹15,000\n- Best camera phone\n- Gaming phones with 8GB RAM\n- OPPO A53 specifications",
                 "query": "",
                 "session_id": session_id,
                 "sources": [],
-                "request_id": request_id
+                "request_id": request_id,
+                "output_format": "explanation"
             }), 400
 
-        # Check if services are initialized
         if not all([service, generator]):
             logger.error(f"[{request_id}] Services not initialized")
             return jsonify({
@@ -341,28 +315,29 @@ def recommend():
                 "request_id": request_id
             }), 503
 
-        # Process query for better retrieval - USE ORIGINAL QUERY for better results
-        processed_query = query  # Use original query instead of processed
+        processed_query = query
         
-        # Generate answer using production generator
         result = generator.generate_answer(processed_query, session_id=session_id)
         
-        # Convert dataclass to dict for JSON response
+        # Determine output format for frontend
+        output_format = "cards" if result.output_format == "card" else "explanation"
+        
         response_data = {
-            "query": query,  # Original query
+            "query": query,
             "answer": result.answer,
             "sources": result.sources,
             "session_id": session_id,
             "resolved_query": result.resolved_query,
             "request_id": request_id,
-            "processing_time": round(time.time() - start_time, 2)
+            "processing_time": round(time.time() - start_time, 2),
+            "output_format": output_format,
+            "mode": result.output_format
         }
         
-        # Add debug info if requested
         if debug_mode:
             response_data["debug"] = result.debug_info
 
-        logger.info(f"[{request_id}] Response: {len(result.sources)} sources, {len(result.answer)} chars, {response_data['processing_time']}s")
+        logger.info(f"[{request_id}] Response: {output_format} mode, {len(result.sources)} sources, {len(result.answer)} chars, {response_data['processing_time']}s")
         return jsonify(response_data)
         
     except Exception as e:
@@ -374,7 +349,7 @@ def recommend():
             "request_id": request_id,
             "processing_time": processing_time
         }), 500
- 
+
 @app.route('/health')
 @limiter.exempt
 def simple_health():
@@ -395,32 +370,34 @@ def health():
     status_code = 200
     
     try:
-        # Check data service
         if df is not None:
             health_data["services"]["data"] = {
                 "status": "healthy",
                 "rows": len(df),
-                "columns": len(df.columns)
+                "columns": len(df.columns),
+                "models": len(df['Model'].unique())
             }
         else:
             health_data["services"]["data"] = {"status": "unhealthy"}
             status_code = 503
             
-        # Check generator service
         if generator is not None:
-            test_result = generator.generate_answer("phones under 1 lakh", session_id="health-check")
+            test_result_card = generator.generate_answer("Samsung Galaxy S23 specs", session_id="health-check")
+            test_result_explanation = generator.generate_answer("Which phone is better for gaming?", session_id="health-check")
+            
             health_data["services"]["generator"] = {
-                "status": "healthy" if test_result and test_result.answer else "degraded",
-                "test_query_processed": True
+                "status": "healthy" if test_result_card and test_result_explanation else "degraded",
+                "type": "DualModeRAGGenerator",
+                "modes_supported": ["card", "explanation"],
+                "card_mode_test": "passed" if test_result_card and test_result_card.answer else "failed",
+                "explanation_mode_test": "passed" if test_result_explanation and test_result_explanation.answer else "failed"
             }
         else:
             health_data["services"]["generator"] = {"status": "unhealthy"}
             status_code = 503
             
-        # Check memory service - handle None case gracefully
         if memory_db is not None:
             try:
-                # Test memory functionality
                 test_session = "health-check-session"
                 test_memory = memory_db.load_memory(test_session)
                 health_data["services"]["memory"] = {
@@ -437,9 +414,7 @@ def health():
                 "status": "disabled",
                 "message": "Session memory not available"
             }
-            # Don't mark as unhealthy if memory is disabled
             
-        # Overall status
         unhealthy_services = [svc for svc, status in health_data["services"].items() 
                             if status["status"] not in ["healthy", "disabled"]]
         if unhealthy_services:
@@ -479,16 +454,34 @@ def clear_session(session_id):
 
 @app.route('/api/info', methods=['GET'])
 def api_info():
-    """API information endpoint"""
+    """API information endpoint - UPDATED for dual mode"""
     return jsonify({
-        "name": "Phone Recommendation API",
-        "version": "1.0.0",
-        "description": "RAG-based phone recommendation system",
+        "name": "PerfectPick Phone Recommendation API",
+        "version": "1.0.1",
+        "description": "Dual-mode RAG-based phone recommendation system with AI-powered insights",
+        "features": {
+            "response_modes": ["cards", "explanation"],
+            "card_mode": "Product specifications in structured card format",
+            "explanation_mode": "Comparisons, advice, and detailed recommendations"
+        },
         "endpoints": {
-            "POST /api/recommend": "Get phone recommendations",
+            "POST /api/recommend": "Get phone recommendations (auto-detects mode)",
             "GET /api/health": "Service health check",
             "DELETE /api/session/{id}": "Clear session memory",
             "GET /api/info": "This information"
+        },
+        "examples": {
+            "card_queries": [
+                "Samsung Galaxy S23 specs",
+                "Phones with 8GB RAM under ₹20,000",
+                "iPhone 15 Pro Max price and features"
+            ],
+            "explanation_queries": [
+                "Which phone is better for gaming?",
+                "Should I buy iPhone or Android?",
+                "Recommend a good camera phone under ₹25,000",
+                "What's the difference between AMOLED and LCD displays?"
+            ]
         }
     })
 
@@ -508,31 +501,26 @@ def shutdown_handler(signum, frame):
 
 # Initialize services on startup
 if __name__ == "__main__":
-    logger.info("🚀 Starting Phone Recommendation Service...")
+    logger.info("🚀 Starting PerfectPick Phone Recommendation Service...")
     
-    # Initialize services
     if not initialize_services():
         logger.error("❌ Service initialization failed. Exiting.")
         sys.exit(1)
     
-    # Register signal handlers for graceful shutdown
     signal.signal(signal.SIGINT, shutdown_handler)
     signal.signal(signal.SIGTERM, shutdown_handler)
     
-    # Get port from environment variable with fallback
     port = int(os.getenv("PORT", 8000))
     host = os.getenv("HOST", "0.0.0.0")
     
     logger.info(f"✅ Starting Flask server on http://{host}:{port}")
     
-    # Run with production settings
     app.run(
         host=host,
         port=port,
-        debug=False,  # Disable debug mode for production
-        threaded=True  # Enable threading for better concurrency
+        debug=False,
+        threaded=True
     )
 else:
-    # For WSGI deployment (e.g., Gunicorn)
     if not initialize_services():
         logger.error("❌ Service initialization failed in WSGI mode")
