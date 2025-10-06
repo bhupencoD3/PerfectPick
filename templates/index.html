@@ -17,13 +17,11 @@
             --card: #1e293b;
             --card-hover: #334155;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
@@ -31,14 +29,12 @@
             color: #e2e8f0;
             overflow-x: hidden;
         }
-
         .glass-card {
             background: rgba(30, 41, 59, 0.8);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
-
         .gradient-text {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
@@ -46,18 +42,16 @@
             color: transparent;
             font-weight: 700;
         }
-
         .gradient-button {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+            color: white !important;
         }
-
         .gradient-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
         }
-
         /* Enhanced Card Styles */
         .phone-card {
             background: linear-gradient(145deg, var(--card) 0%, rgba(30, 41, 59, 0.95) 100%);
@@ -66,7 +60,6 @@
             overflow: hidden;
             position: relative;
         }
-
         .phone-card::before {
             content: '';
             position: absolute;
@@ -76,20 +69,17 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
-
         .phone-card:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             border-color: rgba(99, 102, 241, 0.3);
         }
-
         .specs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 10px;
             margin-top: 16px;
         }
-
         .spec-item {
             background: rgba(255, 255, 255, 0.03);
             padding: 12px;
@@ -97,12 +87,10 @@
             border-left: 3px solid var(--primary);
             transition: all 0.3s ease;
         }
-
         .spec-item:hover {
             background: rgba(255, 255, 255, 0.05);
             transform: translateX(4px);
         }
-
         .spec-label {
             font-size: 0.7rem;
             color: #94a3b8;
@@ -110,14 +98,12 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .spec-value {
             font-size: 0.85rem;
             color: #e2e8f0;
             font-weight: 600;
             margin-top: 4px;
         }
-
         .pulse-dot {
             width: 8px;
             height: 8px;
@@ -125,54 +111,45 @@
             background: var(--primary);
             animation: pulse 2s infinite;
         }
-
         .floating {
             animation: floating 6s ease-in-out infinite;
         }
-
         @keyframes floating {
             0% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(180deg); }
             100% { transform: translateY(0px) rotate(360deg); }
         }
-
         @keyframes pulse {
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.7; transform: scale(1.1); }
             100% { opacity: 1; transform: scale(1); }
         }
-
         .fade-in {
             animation: fadeIn 0.8s ease-out forwards;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         .slide-in {
             animation: slideIn 0.6s ease-out forwards;
         }
-
         @keyframes slideIn {
             from { opacity: 0; transform: translateX(-30px); }
             to { opacity: 1; transform: translateX(0); }
         }
-
         .search-bar {
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
             font-size: 1rem;
         }
-
         .search-bar:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
             background: rgba(15, 23, 42, 0.9);
+            border-radius: 1rem; /* Match rounded-2xl */
         }
-
         .suggestion-chip {
             background: rgba(30, 41, 59, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -180,14 +157,12 @@
             cursor: pointer;
             font-size: 0.85rem;
         }
-
         .suggestion-chip:hover {
             background: rgba(99, 102, 241, 0.2);
             border-color: var(--primary);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
-
         .loading-bar {
             height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
@@ -195,7 +170,6 @@
             transition: width 0.4s ease;
             border-radius: 2px;
         }
-
         .feature-icon {
             width: 50px;
             height: 50px;
@@ -206,7 +180,25 @@
             justify-content: center;
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
         }
-
+        /* Enhanced Explanation Styles */
+        .explanation-content {
+            line-height: 1.6;
+        }
+        .explanation-badge {
+            background: linear-gradient(45deg, #8b5cf6, #a855f7);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        .mode-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10;
+        }
         .result-counter {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             width: 32px;
@@ -219,7 +211,6 @@
             font-weight: 700;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
-
         .price-tag {
             background: linear-gradient(45deg, #10b981, #34d399);
             color: white;
@@ -229,7 +220,6 @@
             font-size: 0.9rem;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
-
         .flipkart-badge {
             background: linear-gradient(45deg, #047bd5, #0a7bb8);
             color: white;
@@ -239,26 +229,22 @@
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(4, 123, 213, 0.3);
         }
-
         .flipkart-button {
             background: linear-gradient(45deg, #047bd5, #0a7bb8);
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(4, 123, 213, 0.3);
             font-size: 0.85rem;
+            color: white !important;
         }
-
         .flipkart-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(4, 123, 213, 0.4);
             background: linear-gradient(45deg, #0369c1, #0967a6);
         }
-
-        /* New Professional Elements */
         .section-title {
             position: relative;
             display: inline-block;
         }
-
         .section-title::after {
             content: '';
             position: absolute;
@@ -269,54 +255,259 @@
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             border-radius: 2px;
         }
-
         .stats-card {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-
-        .feature-highlight {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
-            border-left: 4px solid #10b981;
-        }
-
-        /* Smooth scrolling */
         html {
             scroll-behavior: smooth;
         }
-
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
-
         ::-webkit-scrollbar-track {
             background: rgba(15, 23, 42, 0.5);
         }
-
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             border-radius: 4px;
         }
-
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(45deg, var(--primary-dark), var(--secondary));
+        }
+        /* Purple glass block styling */
+        .purple-glass-block {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(168, 85, 247, 0.25));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+        }
+        .recommendation-block {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.15));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.15);
+            margin-top: 1.5rem;
+        }
+        .numbered-section {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .section-number {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        /* LIGHT MODE STYLES */
+        body.light-mode {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+        }
+        body.light-mode .glass-card,
+        body.light-mode .phone-card,
+        body.light-mode .purple-glass-block,
+        body.light-mode .recommendation-block {
+            background: rgba(255, 255, 255, 0.85) !important;
+            border-color: rgba(0, 0, 0, 0.1) !important;
+            color: #1e293b !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+        body.light-mode .text-gray-200,
+        body.light-mode .text-gray-300,
+        body.light-mode .text-gray-400 {
+            color: #334155 !important;
+        }
+        body.light-mode .text-white {
+            color: #0f172a !important;
+        }
+        body.light-mode .spec-label {
+            color: #64748b !important;
+        }
+        body.light-mode .spec-value {
+            color: #1e293b !important;
+        }
+        body.light-mode .section-title::after {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+        }
+        body.light-mode ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+        }
+        body.light-mode .stats-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.08));
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        body.light-mode .suggestion-chip {
+            background: rgba(241, 245, 249, 0.7);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #1e293b;
+        }
+        body.light-mode .suggestion-chip:hover {
+            background: rgba(99, 102, 241, 0.15);
+            color: #1e293b;
+        }
+        body.light-mode .search-bar {
+            background: white;
+            color: #1e293b;
+            border-color: #cbd5e1;
+        }
+        body.light-mode .search-bar::placeholder {
+            color: #94a3b8;
+        }
+        body.light-mode .search-bar:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            border-radius: 1rem; /* Match rounded-2xl for light mode */
+        }
+        /* Theme toggle button - minimal icon only */
+        #themeToggle {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 50;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        #themeToggle:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+        body.light-mode #themeToggle {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        body.light-mode #themeToggle:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        /* Real-time AI analysis dot - adapt in light mode */
+        body.light-mode .pulse-dot {
+            background: var(--primary);
+        }
+        body.light-mode .realtime-badge {
+            background: rgba(241, 245, 249, 0.7);
+            color: #1e293b;
+        }
+        /* Ensure buttons have consistent size and light-mode text */
+        .action-button {
+            font-size: 0.95rem;
+            padding: 0.875rem 1.25rem !important;
+            min-width: 140px;
+        }
+        body.light-mode .gradient-button,
+        body.light-mode #clearSessionButton {
+            color: white !important;
+        }
+
+        /* EXPLANATION SKELETON */
+        .explanation-skeleton {
+            animation: pulse 2s infinite;
+        }
+        .explanation-skeleton .h-5,
+        .explanation-skeleton .h-4 {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        body.light-mode .explanation-skeleton .h-5,
+        body.light-mode .explanation-skeleton .h-4 {
+            background: rgba(0, 0, 0, 0.08);
+        }
+        
+        /* IMPROVED LOADING STYLES */
+        .loading-container {
+            transition: all 0.5s ease-in-out;
+        }
+        .loading-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+        .loading-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { 
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% { 
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+        
+        .phone-skeleton {
+            animation: shimmer 2s infinite linear;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.03) 0%,
+                rgba(255, 255, 255, 0.08) 50%,
+                rgba(255, 255, 255, 0.03) 100%
+            );
+            background-size: 200% 100%;
+        }
+            
+        .explanation-skeleton-loader {
+            animation: shimmer 2s infinite linear;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.03) 0%,
+                rgba(255, 255, 255, 0.06) 50%,
+                rgba(255, 255, 255, 0.03) 100%
+            );
+            background-size: 200% 100%;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
+    <!-- Theme Toggle - Top Right -->
+    <button id="themeToggle">
+        <i class="fas fa-sun text-white text-lg"></i>
+    </button>
     <!-- Enhanced Animated Background -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute -top-60 -right-60 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-pulse floating"></div>
         <div class="absolute -bottom-60 -left-60 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-pulse floating" style="animation-delay: 2s;"></div>
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-pulse floating" style="animation-delay: 4s;"></div>
     </div>
-
     <div class="container max-w-7xl mx-auto relative z-10 flex-1 py-8 px-4">
         <!-- Enhanced Header -->
         <header class="text-center mb-16">
             <div class="flex items-center justify-center mb-6">
-                <div class="feature-icon mr-3" style="box-shadow: 0 8px-25px rgba(99, 102, 241, 0.4);">
+                <div class="feature-icon mr-3">
                     <i class="fas fa-magic text-white text-xl"></i>
                 </div>
                 <h1 class="text-5xl md:text-6xl font-bold gradient-text">PerfectPick</h1>
@@ -329,15 +520,18 @@
                     <i class="fas fa-database mr-2"></i>
                     Powered by Flipkart Data
                 </div>
-                <div class="flex items-center text-gray-400 bg-gray-800/50 px-4 py-2 rounded-full">
+                <div class="explanation-badge flex items-center">
+                    <i class="fas fa-robot mr-2"></i>
+                    Dual-Mode AI Assistant
+                </div>
+                <div class="realtime-badge flex items-center text-gray-400 bg-gray-800/50 px-4 py-2 rounded-full">
                     <div class="pulse-dot mr-3"></div>
                     <span class="text-sm font-medium">Real-time AI Analysis</span>
                 </div>
             </div>
         </header>
-
-        <!-- Stats Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <!-- Stats & Search -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
             <div class="stats-card glass-card rounded-2xl p-6 text-center">
                 <i class="fas fa-robot text-2xl text-indigo-400 mb-3"></i>
                 <h3 class="text-lg font-semibold text-white mb-2">AI-Powered</h3>
@@ -353,13 +547,16 @@
                 <h3 class="text-lg font-semibold text-white mb-2">Data-Driven</h3>
                 <p class="text-gray-400 text-sm">Based on real market data</p>
             </div>
+            <div class="stats-card glass-card rounded-2xl p-6 text-center">
+                <i class="fas fa-sync-alt text-2xl text-purple-400 mb-3"></i>
+                <h3 class="text-lg font-semibold text-white mb-2">Dual Mode</h3>
+                <p class="text-gray-400 text-sm">Cards & Explanations</p>
+            </div>
         </div>
-
-        <!-- Enhanced Search Section -->
         <section class="mb-12">
             <h2 class="section-title text-3xl font-bold text-white mb-8">Find Your Perfect Phone</h2>
             <div class="glass-card rounded-3xl p-8 mb-8">
-                <div class="flex flex-col md:flex-row gap-6 items-center">
+                <div class="flex flex-col md:flex-row gap-4 items-center">
                     <div class="flex-1 relative w-full">
                         <div class="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400">
                             <i class="fas fa-search text-lg"></i>
@@ -367,36 +564,37 @@
                         <input
                             type="text"
                             id="queryInput"
-                            placeholder="Describe your ideal phone: 'Best camera under ₹30,000' or 'Gaming phone with 120Hz display'"
+                            placeholder="Describe your ideal phone: 'Best camera phone under ₹30,000'"
                             class="w-full pl-14 pr-6 py-5 rounded-2xl search-bar text-white placeholder-gray-400 focus:outline-none transition-all duration-300 text-lg"
                             aria-label="Enter your phone query"
                         />
                     </div>
-                    <div class="flex gap-4">
+                    <div class="flex flex-col md:flex-row gap-4">
                         <button
                             id="submitButton"
-                            class="gradient-button text-white font-semibold py-5 px-8 rounded-2xl focus:outline-none focus:ring-3 focus:ring-indigo-500 flex items-center text-lg"
+                            class="gradient-button font-semibold rounded-2xl focus:outline-none focus:ring-3 focus:ring-indigo-500 focus:ring-opacity-50 flex items-center action-button"
                             onclick="fetchRecommendations()"
                             aria-label="Get recommendations"
                         >
-                            <i class="fas fa-robot mr-3"></i>
+                            <i class="fas fa-robot mr-2"></i>
                             Find Phones
                         </button>
-                        <button
-                            id="clearSessionButton"
-                            class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-5 px-6 rounded-2xl focus:outline-none focus:ring-3 focus:ring-gray-500 flex items-center text-lg transition-all duration-300"
-                            onclick="clearSession()"
-                            aria-label="Clear conversation history"
-                        >
-                            <i class="fas fa-history mr-2"></i>
-                            Clear History
-                        </button>
+                        <div class="flex flex-col items-center">
+                            <button
+                                id="clearSessionButton"
+                                class="bg-gray-600 hover:bg-gray-700 font-semibold py-3 px-5 rounded-2xl focus:outline-none focus:ring-3 focus:ring-gray-500 focus:ring-opacity-50 flex items-center text-white action-button"
+                                onclick="clearSession()"
+                                aria-label="Clear conversation history"
+                            >
+                                <i class="fas fa-history mr-2"></i>
+                                Clear History
+                            </button>
+                            <span class="text-xs text-gray-500 mt-2 text-center">(Click to forget past chats)</span>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Enhanced Quick Suggestions -->
                 <div class="mt-8">
-                    <p class="text-gray-400 text-sm mb-4 font-semibold uppercase tracking-wide">Popular Searches:</p>
+                    <p class="text-gray-400 text-sm mb-4 font-semibold uppercase tracking-wide">Try These Examples:</p>
                     <div class="flex flex-wrap gap-3">
                         <div class="suggestion-chip px-4 py-3 rounded-xl text-sm font-medium" onclick="setSuggestion('Best phones under ₹20,000')">
                             <i class="fas fa-rupee-sign mr-2"></i>Under ₹20K
@@ -404,52 +602,47 @@
                         <div class="suggestion-chip px-4 py-3 rounded-xl text-sm font-medium" onclick="setSuggestion('Gaming phones with 8GB RAM')">
                             <i class="fas fa-gamepad mr-2"></i>Gaming Phones
                         </div>
-                        <div class="suggestion-chip px-4 py-3 rounded-xl text-sm font-medium" onclick="setSuggestion('Best camera phone 2024')">
-                            <i class="fas fa-camera mr-2"></i>Best Camera
+                        <div class="suggestion-chip px-4 py-3 rounded-xl text-sm font-medium" onclick="setSuggestion('Which phone is better for photography?')">
+                            <i class="fas fa-camera mr-2"></i>Camera Comparison
                         </div>
                         <div class="suggestion-chip px-4 py-3 rounded-xl text-sm font-medium" onclick="setSuggestion('Long battery life phones')">
                             <i class="fas fa-battery-full mr-2"></i>Long Battery
+                        </div>
+                        <div class="suggestion-chip px-4 py-3 rounded-xl text-sm font-medium" onclick="setSuggestion('Should I buy Samsung S23 or OnePlus 11?')">
+                            <i class="fas fa-balance-scale mr-2"></i>Phone Comparison
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- Loading Indicator -->
-        <div id="loader" class="hidden mb-12">
+        
+        <!-- IMPROVED LOADER SECTION -->
+        <div id="loader" class="hidden mb-12 loading-container">
             <div class="text-center mb-8">
-                <div class="loading-bar rounded-full mb-4 mx-auto max-w-2xl"></div>
+                <div class="loading-bar-container rounded-full mb-4 mx-auto max-w-2xl">
+                    <div class="loading-bar rounded-full h-3 transition-all duration-700 ease-out"></div>
+                </div>
                 <div class="flex items-center justify-between text-gray-400 text-sm max-w-2xl mx-auto">
-                    <span>Processing your request...</span>
-                    <span id="loadingStep">Initializing AI</span>
+                    <span id="loadingStatus">Starting up...</span>
+                    <span id="loadingStep" class="flex items-center">
+                        <span class="loading-dots mr-2">
+                            <span class="loading-dot"></span>
+                            <span class="loading-dot"></span>
+                            <span class="loading-dot"></span>
+                        </span>
+                        <span>Initializing</span>
+                    </span>
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass-card p-6 rounded-2xl animate-pulse">
-                    <div class="h-7 bg-gray-700 rounded w-3/4 mb-4"></div>
-                    <div class="h-4 bg-gray-700 rounded w-full mb-3"></div>
-                    <div class="h-4 bg-gray-700 rounded w-5/6"></div>
-                </div>
-                <div class="glass-card p-6 rounded-2xl animate-pulse">
-                    <div class="h-7 bg-gray-700 rounded w-3/4 mb-4"></div>
-                    <div class="h-4 bg-gray-700 rounded w-full mb-3"></div>
-                    <div class="h-4 bg-gray-700 rounded w-5/6"></div>
-                </div>
-                <div class="glass-card p-6 rounded-2xl animate-pulse">
-                    <div class="h-7 bg-gray-700 rounded w-3/4 mb-4"></div>
-                    <div class="h-4 bg-gray-700 rounded w-full mb-3"></div>
-                    <div class="h-4 bg-gray-700 rounded w-5/6"></div>
-                </div>
+            <div id="loaderContent">
+                <!-- Dynamic content based on query type will be inserted here -->
             </div>
         </div>
-
-        <!-- Results Section -->
+        
         <section id="resultsSection">
             <div id="results" class="space-y-8" aria-live="polite"></div>
         </section>
     </div>
-
-    <!-- Enhanced Footer -->
     <footer class="mt-20 py-8 relative z-10 border-t border-gray-800/50">
         <div class="container max-w-7xl mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
@@ -457,7 +650,7 @@
                     <div class="flex items-center space-x-4">
                         <span class="flex items-center">
                             <i class="fas fa-brain mr-2 text-indigo-400"></i>
-                            Powered by Advanced AI
+                            Dual-Mode AI Assistant
                         </span>
                         <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
                         <span class="flex items-center">
@@ -475,553 +668,606 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        // Session management
-        let currentSessionId = localStorage.getItem('perfectpick_session_id');
-
-        // Function to get or create session ID
-        function getSessionId() {
-            if (!currentSessionId) {
-                currentSessionId = generateSessionId();
-                localStorage.setItem('perfectpick_session_id', currentSessionId);
+<script>
+    // =============== THEME TOGGLE ===============
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    const savedTheme = localStorage.getItem('perfectpick_theme') || 'dark';
+    if (savedTheme === 'light') {
+        body.classList.add('light-mode');
+        updateThemeButton(true);
+    }
+    function updateThemeButton(isLight) {
+        const icon = themeToggle.querySelector('i');
+        if (isLight) {
+            icon.className = 'fas fa-moon text-gray-800 text-lg';
+        } else {
+            icon.className = 'fas fa-sun text-white text-lg';
+        }
+    }
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-mode');
+        const isLight = body.classList.contains('light-mode');
+        localStorage.setItem('perfectpick_theme', isLight ? 'light' : 'dark');
+        updateThemeButton(isLight);
+    });
+    // =============== SESSION & UTILS ===============
+    let currentSessionId = localStorage.getItem('perfectpick_session_id');
+    function getSessionId() {
+        if (!currentSessionId) {
+            currentSessionId = generateSessionId();
+            localStorage.setItem('perfectpick_session_id', currentSessionId);
+        }
+        return currentSessionId;
+    }
+    function generateSessionId() {
+        return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+    }
+    async function clearSession() {
+        const sessionIdToClear = localStorage.getItem('perfectpick_session_id');
+        try {
+            if (sessionIdToClear) {
+                const response = await fetch(`/api/session/${sessionIdToClear}`, { method: 'DELETE' });
+                if (!response.ok) console.warn('Failed to clear session from server');
             }
-            return currentSessionId;
+            localStorage.removeItem('perfectpick_session_id');
+            currentSessionId = null;
+            showNotification('Conversation history cleared completely', 'success');
+        } catch (error) {
+            console.error('Error clearing session:', error);
+            showNotification('Error clearing history', 'error');
+            localStorage.removeItem('perfectpick_session_id');
+            currentSessionId = null;
         }
-
-        // Function to generate session ID
-        function generateSessionId() {
-            return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
-        }
-
-        // Function to clear session from both frontend and backend
-        async function clearSession() {
-            const sessionIdToClear = localStorage.getItem('perfectpick_session_id');
+    }
+    function setSuggestion(text) {
+        document.getElementById('queryInput').value = text;
+        document.getElementById('queryInput').focus();
+    }
+    function showNotification(message, type) {
+        const existing = document.querySelector('.notification');
+        if (existing) existing.remove();
+        const notif = document.createElement('div');
+        notif.className = `notification fixed top-6 right-6 z-50 px-6 py-4 rounded-2xl shadow-2xl transform transition-all duration-300 ${
+            type === 'error' ? 'bg-red-500' : 'bg-gradient-to-r from-green-500 to-emerald-600'
+        } text-white font-semibold`;
+        notif.textContent = message;
+        document.body.appendChild(notif);
+        setTimeout(() => {
+            notif.style.transform = 'translateX(100%)';
+            setTimeout(() => notif.remove(), 300);
+        }, 4000);
+    }
+    // =============== COPY FUNCTION ===============
+    function copyRecommendation() {
+        const content = document.querySelector('.purple-glass-block')?.innerText || 'No analysis to copy';
+        navigator.clipboard.writeText(content).then(() => {
+            showNotification('Analysis copied to clipboard!', 'success');
+        }).catch(() => {
+            showNotification('Failed to copy', 'error');
+        });
+    }
+    // =============== IMPROVED LOADING SYSTEM ===============
+    function simulateIntelligentLoading() {
+        let progress = 0;
+        const interval = setInterval(() => {
+            // More realistic progression - faster at start, slower at end
+            const increment = progress < 30 ? 12 : progress < 60 ? 8 : progress < 85 ? 5 : 3;
+            progress = Math.min(progress + increment, 92); // Cap at 92% to leave room for final completion
             
-            try {
-                // Call backend API to clear session from PostgreSQL
-                if (sessionIdToClear) {
-                    const response = await fetch(`/api/session/${sessionIdToClear}`, {
-                        method: 'DELETE'
-                    });
-                    
-                    if (response.ok) {
-                        console.log('Session cleared from PostgreSQL');
-                    } else {
-                        console.warn('Failed to clear session from server, but continuing...');
-                    }
-                }
-                
-                // Clear frontend storage
-                localStorage.removeItem('perfectpick_session_id');
-                currentSessionId = null;
-                showNotification('Conversation history cleared completely', 'success');
-                
-            } catch (error) {
-                console.error('Error clearing session:', error);
-                showNotification('Error clearing history from server', 'error');
-                
-                // Still clear frontend even if backend fails
-                localStorage.removeItem('perfectpick_session_id');
-                currentSessionId = null;
-            }
-        }
-
-        // Set suggestion function
-        function setSuggestion(text) {
-            document.getElementById('queryInput').value = text;
-            document.getElementById('queryInput').focus();
-        }
-
-        // Enhanced loading animation
-        function simulateLoading() {
-            const steps = [
-                "Analyzing your query...",
-                "Searching Flipkart database...",
-                "Filtering results...",
-                "Generating recommendations...",
-                "Almost done..."
+            document.querySelector('.loading-bar').style.width = `${progress}%`;
+            
+            // Dynamic status messages based on progress
+            const statusMessages = [
+                { threshold: 0, status: "Starting up...", step: "Initializing" },
+                { threshold: 15, status: "Analyzing your query...", step: "Analyzing" },
+                { threshold: 35, status: "Searching phone database...", step: "Searching" },
+                { threshold: 55, status: "Processing specifications...", step: "Processing" },
+                { threshold: 75, status: "Generating recommendations...", step: "Generating" },
+                { threshold: 85, status: "Finalizing results...", step: "Finalizing" }
             ];
             
-            let step = 0;
-            const interval = setInterval(() => {
-                if (step < steps.length) {
-                    document.getElementById('loadingStep').textContent = steps[step];
-                    document.querySelector('.loading-bar').style.width = `${(step + 1) * 20}%`;
-                    step++;
-                } else {
-                    clearInterval(interval);
-                }
-            }, 600);
-            
-            return interval;
-        }
+            const currentStatus = statusMessages.filter(m => progress >= m.threshold).pop() || statusMessages[0];
+            document.getElementById('loadingStatus').textContent = currentStatus.status;
+            document.getElementById('loadingStep').innerHTML = `
+                <span class="loading-dots mr-2">
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
+                </span>
+                <span>${currentStatus.step}</span>
+            `;
+        }, 500);
+        
+        return interval;
+    }
 
-        // Function to redirect to Flipkart search
-        function searchFlipkart(phoneModel) {
-            // Clean the model name for URL
-            const cleanModel = phoneModel
-                .replace(/[^\w\s\-]/gi, '')  // Keep hyphens for model numbers
-                .replace(/\s+/g, '+')        // Replace spaces with +
-                .replace(/\++/g, '+')        // Remove duplicate +
-                .trim();
-            
-            // Create Flipkart search URL
-            const flipkartUrl = `https://www.flipkart.com/search?q=${cleanModel}+mobile`;
-            
-            // Open in new tab
-            window.open(flipkartUrl, '_blank');
-            
-            // Show notification
-            showNotification(`Searching for ${phoneModel} on Flipkart...`, 'success');
-        }
+    function completeLoading() {
+        document.querySelector('.loading-bar').style.width = '100%';
+        document.getElementById('loadingStatus').textContent = "Complete!";
+        document.getElementById('loadingStep').innerHTML = `
+            <span class="text-green-400 flex items-center">
+                <i class="fas fa-check-circle mr-2"></i>
+                Ready
+            </span>
+        `;
+    }
 
-        async function fetchRecommendations() {
-            const queryInput = document.getElementById('queryInput');
-            const submitButton = document.getElementById('submitButton');
-            const loader = document.getElementById('loader');
-            const resultsDiv = document.getElementById('results');
-            const query = queryInput.value.trim();
-
-            if (!query) {
-                showNotification('Please enter a query to find phones.', 'error');
-                return;
-            }
-
-            // Show loading state
-            loader.classList.remove('hidden');
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Analyzing...';
-            resultsDiv.innerHTML = '';
-
-            // Start loading animation
-            const loadingInterval = simulateLoading();
-
-            try {
-                const sessionId = getSessionId(); // Get the persistent session ID
-                
-                const response = await fetch('/api/recommend', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        query: query,
-                        session_id: sessionId  // Include the session ID
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch recommendations');
-                }
-
-                const data = await response.json();
-                
-                // Clear loading animation
-                clearInterval(loadingInterval);
-                loader.classList.add('hidden');
-                submitButton.disabled = false;
-                submitButton.innerHTML = '<i class="fas fa-robot mr-2"></i> Find Phones';
-
-                console.log('API Response:', data);
-                console.log('Session ID:', sessionId);
-
-                if (!data.answer || data.answer.trim() === '') {
-                    resultsDiv.innerHTML = `
-                        <div class="text-center py-12 fade-in">
-                            <i class="fas fa-search fa-4x text-gray-600 mb-6"></i>
-                            <h3 class="text-2xl font-bold text-white mb-3">No phones found</h3>
-                            <p class="text-gray-400 text-lg">Try adjusting your search terms or explore different categories</p>
+    // =============== DYNAMIC LOADER CONTENT ===============
+    function createCardsSkeleton() {
+        return `
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                ${Array.from({length: 3}, () => `
+                    <div class="phone-skeleton glass-card p-6 rounded-2xl">
+                        <div class="h-7 bg-gradient-to-r from-gray-700 to-gray-600 rounded w-3/4 mb-4"></div>
+                        <div class="h-4 bg-gray-700 rounded w-full mb-3"></div>
+                        <div class="h-4 bg-gray-700 rounded w-5/6 mb-4"></div>
+                        <div class="grid grid-cols-2 gap-3 mt-4">
+                            <div class="h-3 bg-gray-700 rounded"></div>
+                            <div class="h-3 bg-gray-700 rounded"></div>
+                            <div class="h-3 bg-gray-700 rounded"></div>
+                            <div class="h-3 bg-gray-700 rounded"></div>
                         </div>
-                    `;
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    function createExplanationSkeletonLoader() {
+        return `
+            <div class="explanation-skeleton-loader glass-card rounded-2xl p-8">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="h-8 bg-gray-700 rounded w-64"></div>
+                    <div class="h-6 bg-gray-700 rounded w-32"></div>
+                </div>
+                <div class="purple-glass-block rounded-2xl p-6 space-y-6">
+                    <div>
+                        <div class="h-5 bg-gray-700 rounded w-24 mb-3"></div>
+                        <div class="h-4 bg-gray-700 rounded w-full"></div>
+                        <div class="h-4 bg-gray-700 rounded w-5/6 mt-2"></div>
+                    </div>
+                    <div>
+                        <div class="h-5 bg-gray-700 rounded w-32 mb-3"></div>
+                        <div class="space-y-3">
+                            <div class="h-4 bg-gray-700 rounded w-full"></div>
+                            <div class="h-4 bg-gray-700 rounded w-4/5"></div>
+                            <div class="h-4 bg-gray-700 rounded w-11/12"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <div class="h-5 bg-gray-700 rounded w-40 mb-3"></div>
+                    <div class="h-4 bg-gray-700 rounded w-full"></div>
+                    <div class="h-4 bg-gray-700 rounded w-3/4 mt-2"></div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-gray-700/50 flex items-center justify-between">
+                    <div class="h-4 bg-gray-700 rounded w-48"></div>
+                    <div class="flex space-x-4">
+                        <div class="h-8 bg-gray-700 rounded w-20"></div>
+                        <div class="h-8 bg-gray-700 rounded w-24"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function setupLoaderContent(query) {
+        const loaderContent = document.getElementById('loaderContent');
+        const isExplanationQuery = /explain|compare|which|should i|recommend|difference|vs|versus/i.test(query);
+        
+        if (isExplanationQuery) {
+            loaderContent.innerHTML = createExplanationSkeletonLoader();
+        } else {
+            loaderContent.innerHTML = createCardsSkeleton();
+        }
+    }
+
+    function searchFlipkart(phoneModel) {
+        const clean = phoneModel.replace(/[^\w\s\-]/gi, '').replace(/\s+/g, '+').trim();
+        window.open(`https://www.flipkart.com/search?q=${clean}+mobile`, '_blank');
+        showNotification(`Searching for ${phoneModel} on Flipkart...`, 'success');
+    }
+
+    // ✅ NEW: Explanation Skeleton Generator (for final display)
+    function createExplanationSkeleton() {
+        return `
+            <div class="glass-card rounded-2xl p-8 fade-in relative explanation-skeleton">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="h-8 bg-gray-700 rounded w-64"></div>
+                    <div class="h-6 bg-gray-700 rounded w-32"></div>
+                </div>
+                <div class="purple-glass-block rounded-2xl p-6 space-y-6">
+                    <div>
+                        <div class="h-5 bg-gray-700 rounded w-24 mb-3"></div>
+                        <div class="h-4 bg-gray-700 rounded w-full"></div>
+                        <div class="h-4 bg-gray-700 rounded w-5/6 mt-2"></div>
+                    </div>
+                    <div>
+                        <div class="h-5 bg-gray-700 rounded w-32 mb-3"></div>
+                        <div class="space-y-3">
+                            <div class="h-4 bg-gray-700 rounded w-full"></div>
+                            <div class="h-4 bg-gray-700 rounded w-4/5"></div>
+                            <div class="h-4 bg-gray-700 rounded w-11/12"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <div class="h-5 bg-gray-700 rounded w-40 mb-3"></div>
+                    <div class="h-4 bg-gray-700 rounded w-full"></div>
+                    <div class="h-4 bg-gray-700 rounded w-3/4 mt-2"></div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-gray-700/50 flex items-center justify-between">
+                    <div class="h-4 bg-gray-700 rounded w-48"></div>
+                    <div class="flex space-x-4">
+                        <div class="h-8 bg-gray-700 rounded w-20"></div>
+                        <div class="h-8 bg-gray-700 rounded w-24"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    async function fetchRecommendations() {
+        const input = document.getElementById('queryInput');
+        const btn = document.getElementById('submitButton');
+        const loader = document.getElementById('loader');
+        const results = document.getElementById('results');
+        const query = input.value.trim();
+        if (!query) return showNotification('Please enter a query.', 'error');
+
+        // Clear previous results and show loader
+        results.innerHTML = '';
+        loader.classList.remove('hidden');
+        
+        // Setup appropriate loader content based on query type
+        setupLoaderContent(query);
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Analyzing...';
+
+        const loadingInterval = simulateIntelligentLoading();
+        try {
+            const res = await fetch('/api/recommend', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query, session_id: getSessionId() })
+            });
+            if (!res.ok) throw new Error('Failed to fetch');
+            const data = await res.json();
+            
+            clearInterval(loadingInterval);
+            completeLoading();
+            
+            // Small delay to show completion state
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-robot mr-2"></i> Find Phones';
+
+                if (!data.answer?.trim()) {
+                    results.innerHTML = `<div class="text-center py-12 fade-in"><i class="fas fa-search fa-4x text-gray-600 mb-6"></i><h3 class="text-2xl font-bold text-white mb-3">No phones found</h3><p class="text-gray-400 text-lg">Try adjusting your search</p></div>`;
                     return;
                 }
-
-                // Parse and display results with card formatting
-                displayCardResults(data.answer, resultsDiv);
-                
-                // Show success notification
-                showNotification('Found perfect matches for you!', 'success');
-                
-            } catch (error) {
-                // Clear loading animation
-                clearInterval(loadingInterval);
-                loader.classList.add('hidden');
-                submitButton.disabled = false;
-                submitButton.innerHTML = '<i class="fas fa-robot mr-2"></i> Find Phones';
-                
-                showNotification(`Error: ${error.message}`, 'error');
-                console.error('Error:', error);
-            }
+                displayResults(data.answer, results, data.output_format);
+                showNotification(`Found ${data.output_format === 'card' ? 'phone cards' : 'expert analysis'}!`, 'success');
+            }, 300);
+            
+        } catch (error) {
+            clearInterval(loadingInterval);
+            loader.classList.add('hidden');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-robot mr-2"></i> Find Phones';
+            showNotification(`Error: ${error.message}`, 'error');
+            console.error('Error:', error);
         }
+    }
 
-        function displayCardResults(answer, container) {
-            console.log('Raw answer:', answer);
-            
-            // Clean up the answer
-            let cleanAnswer = answer
-                .replace(/\*\*/g, '')
-                .replace(/\*/g, '')
-                .replace(/Memory: nan/g, 'Memory: Not specified')
-                .replace(/Rating: nan/g, 'Rating: Not rated')
-                .replace(/Price: ₹nan/g, 'Price: Not available')
-                .replace(/Color: nan/g, 'Color: Various')
-                .replace(/Storage: nan/g, 'Storage: Not specified');
-
-            const lines = cleanAnswer.split('\n').filter(line => line.trim());
-            
-            console.log('Cleaned lines:', lines);
-            
-            let html = '';
-            let phoneCount = 0;
-
-            // Parse cards that are on single lines
-            const cardRegex = /┌─ PHONE CARD ─+┐(.*?)└─+┘/gs;
-            const cards = [];
-            let match;
-
-            // Reset regex lastIndex
-            cardRegex.lastIndex = 0;
-            
-            // Find all card blocks in the text
-            while ((match = cardRegex.exec(cleanAnswer)) !== null) {
-                const cardContent = match[1];
-                // Split card content by lines and filter out empty lines and border characters
-                const cardLines = cardContent.split('│')
-                    .map(line => line.trim())
-                    .filter(line => line && !line.includes('─') && !line.includes('┌') && !line.includes('└'));
-                
-                if (cardLines.length > 0) {
-                    cards.push(cardLines);
+    // =============== PARSING & RENDERING ===============
+    function parseStructuredExplanation(text) {
+        const sections = { summary: '', details: '', recommendation: '' };
+        const sumIdx = text.indexOf('# SUMMARY');
+        const detIdx = text.indexOf('# DETAILS');
+        const recIdx = text.indexOf('# RECOMMENDATION');
+        if (sumIdx !== -1 && detIdx !== -1) sections.summary = text.substring(sumIdx + 9, detIdx).trim();
+        if (detIdx !== -1 && recIdx !== -1) sections.details = text.substring(detIdx + 9, recIdx).trim();
+        if (recIdx !== -1) {
+            let rec = text.substring(recIdx + 14).trim();
+            const firstLetter = rec.search(/[a-zA-Z]/);
+            if (firstLetter > 0) rec = rec.substring(firstLetter);
+            const badPrefixes = [/^ON\s+/i, /^The recommendation is:\s*/i, /^Recommendation:\s*/i];
+            for (const p of badPrefixes) {
+                if (p.test(rec)) {
+                    rec = rec.replace(p, '');
+                    break;
                 }
             }
+            sections.recommendation = rec;
+        }
+        return sections;
+    }
 
-            console.log('Cards found:', cards.length, cards);
-
-            if (cards.length > 0) {
-                // Display cards in a grid
-                html += `
-                    <div class="flex items-center justify-between mb-8 slide-in">
-                        <h2 class="text-3xl font-bold text-white section-title">
-                            <i class="fas fa-star mr-3 text-yellow-400"></i>
-                            Recommended Phones
-                        </h2>
-                        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                            ${cards.length} Phones Found
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                `;
-
-                // Generate card HTML for each phone
-                cards.forEach((cardLines, index) => {
-                    phoneCount++;
-                    html += createPhoneCardFromLines(cardLines, phoneCount, index);
-                });
-
-                html += '</div>';
-
-            } else {
-                // Fallback to other parsing methods
-                const hasNumberedList = lines.some(line => /^\d+\.\s+/.test(line));
-                const hasPhoneKeywords = lines.some(line => 
-                    line.toLowerCase().includes('samsung') || 
-                    line.toLowerCase().includes('iphone') ||
-                    line.toLowerCase().includes('oneplus') ||
-                    line.toLowerCase().includes('xiaomi') ||
-                    line.toLowerCase().includes('oppo') ||
-                    line.toLowerCase().includes('vivo') ||
-                    line.toLowerCase().includes('realme') ||
-                    line.toLowerCase().includes('motorola')
-                );
-
-                if (hasNumberedList) {
-                    html += createResultsHeader('Recommended Phones', lines);
-                    html += parseNumberedList(lines);
-                } else if (hasPhoneKeywords) {
-                    html += createResultsHeader('Recommended Phones', lines);
-                    html += parseFreeTextPhones(lines);
+    function parseExplanationDetails(detailsText) {
+        if (!detailsText || !detailsText.trim()) {
+            return '<p class="text-gray-400">No analysis.</p>';
+        }
+        let sections = [];
+        // ✅ CASE 1: Proper ## format
+        if (detailsText.includes('## ')) {
+            sections = detailsText.split(/##\s+/).filter(s => s.trim());
+            if (sections.length > 0 && sections[0].trim().length <= 10) {
+                sections = sections.slice(1);
+            }
+        }
+        // ❌ CASE 2: Numbered drift
+        else if (/^\s*\d+\s*\n/.test(detailsText.trim())) {
+            const lines = detailsText.split('\n').map(l => l.trim()).filter(l => l);
+            let currentSection = '';
+            let currentNumber = 1;
+            for (const line of lines) {
+                if (new RegExp(`^${currentNumber}\\s*$`).test(line)) {
+                    if (currentSection) sections.push(currentSection);
+                    currentSection = '';
+                    currentNumber++;
                 } else {
-                    html = `
-                        <div class="phone-card rounded-2xl p-8 fade-in">
-                            <div class="answer-content text-gray-300 text-lg leading-relaxed">
-                                ${formatTextResponse(cleanAnswer)}
-                            </div>
-                        </div>
-                    `;
+                    currentSection += (currentSection ? ' ' : '') + line;
                 }
             }
-
-            container.innerHTML = html;
-            
-            // Smooth scroll to results
-            setTimeout(() => {
-                document.getElementById('resultsSection').scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }, 500);
+            if (currentSection) sections.push(currentSection);
+        }
+        // 🟡 CASE 3: No structure → single section
+        else {
+            sections = [detailsText];
         }
 
-        function createPhoneCardFromLines(cardLines, phoneNumber, index) {
-            let model = 'Phone Model';
-            let price = 'Price not available';
-            let specs = [];
+        let html = '';
+        let sectionNumber = 0;
+        for (const section of sections) {
+            sectionNumber++;
+            const lines = section.split('\n').map(l => l.trim()).filter(l => l);
+            if (!lines.length) continue;
 
-            cardLines.forEach(line => {
-                if (line.toLowerCase().includes('model:')) {
-                    model = line.replace(/model:/gi, '').trim();
-                } else if (line.toLowerCase().includes('price:')) {
-                    price = line.replace(/price:/gi, '').trim();
-                } else if (line.includes(':')) {
-                    specs.push(line);
+            const fixedLines = [];
+            for (let i = 0; i < lines.length; i++) {
+                let current = lines[i];
+                while (
+                    i + 1 < lines.length &&
+                    !/[.!?]$/.test(current) &&
+                    /^[a-z0-9]/.test(lines[i + 1])
+                ) {
+                    i++;
+                    current += ' ' + lines[i];
                 }
-            });
+                fixedLines.push(current);
+            }
 
-            // Clean up duplicate "Rating:" text
-            specs = specs.map(spec => spec.replace('Rating: Rating:', 'Rating:'));
+            const firstLine = fixedLines[0];
+            const words = firstLine.split(' ');
+            let title = '';
+            let contentFromTitle = '';
+            let breakIndex = Math.min(4, words.length);
+            for (let i = 1; i < Math.min(5, words.length); i++) {
+                const word = words[i].toLowerCase();
+                if (['the', 'a', 'an', 'features', 'boasts', 'offers', 'is', 'has'].includes(word) || word.endsWith('s')) {
+                    breakIndex = i;
+                    break;
+                }
+            }
+            title = words.slice(0, breakIndex).join(' ');
+            contentFromTitle = words.slice(breakIndex).join(' ');
 
-            return `
-                <div class="phone-card rounded-2xl p-6 fade-in" style="animation-delay: ${index * 0.1}s">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center">
-                            <div class="result-counter text-white mr-4">${phoneNumber}</div>
-                            <h3 class="text-xl font-bold text-white">${model}</h3>
-                        </div>
-                        <div class="price-tag">${price}</div>
-                    </div>
-                    <div class="specs-grid">
-                        ${specs.map(spec => {
-                            const [key, value] = spec.split(':').map(s => s.trim());
-                            if (!key || !value) return '';
-                            return `
-                                <div class="spec-item">
-                                    <div class="spec-label">${key}</div>
-                                    <div class="spec-value">${value}</div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                    <div class="mt-6 pt-5 border-t border-gray-600/50">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400 text-sm font-medium">Verified Data</span>
-                            <button onclick="searchFlipkart('${model}')" class="flipkart-button text-white font-semibold py-3 px-6 rounded-xl flex items-center transition-all duration-300 text-sm">
-                                <i class="fas fa-external-link-alt mr-2"></i>
-                                View on Flipkart
-                            </button>
-                        </div>
+            html += `<div class="numbered-section"><div class="section-number">${sectionNumber}</div><div class="flex-1"><h4 class="text-base font-bold text-white mb-2">${title}</h4><div class="space-y-2">`;
+            if (contentFromTitle.trim()) html += `<p class="text-gray-200 text-base leading-relaxed">${contentFromTitle}</p>`;
+            for (let i = 1; i < fixedLines.length; i++) {
+                let line = fixedLines[i].trim();
+                if (!line) continue;
+                if (line.includes(' - ') && !line.startsWith('- ')) {
+                    const parts = line.split(' - ').map(p => p.trim()).filter(p => p);
+                    for (const part of parts) {
+                        html += `<div class="flex items-start"><i class="fas fa-check text-purple-400 mt-0.5 mr-2 text-xs"></i><span class="text-gray-200 text-base">${part}</span></div>`;
+                    }
+                } else if (line.startsWith('- ')) {
+                    const item = line.substring(2).trim();
+                    html += `<div class="flex items-start"><i class="fas fa-check text-purple-400 mt-0.5 mr-2 text-xs"></i><span class="text-gray-200 text-base">${item}</span></div>`;
+                } else {
+                    html += `<p class="text-gray-200 text-base leading-relaxed">${line}</p>`;
+                }
+            }
+            html += '</div></div></div>';
+        }
+        return html;
+    }
+
+    function createExplanationView(content) {
+        const s = parseStructuredExplanation(content);
+        if (!s.summary && !s.details && !s.recommendation) {
+            return `<div class="glass-card rounded-2xl p-8"><div class="purple-glass-block rounded-2xl p-6"><div class="text-gray-200 text-base whitespace-pre-wrap">${content}</div></div></div>`;
+        }
+        return `
+            <div class="glass-card rounded-2xl p-8 fade-in relative">
+                <div class="mode-indicator">
+                    <div class="explanation-badge flex items-center">
+                        <i class="fas fa-chart-bar mr-2"></i> Expert Analysis
                     </div>
                 </div>
-            `;
-        }
-
-        function createResultsHeader(title, lines) {
-            let phoneCount = 0;
-            const phoneIndicators = lines.filter(line => 
-                /^\d+\.\s+/.test(line) || 
-                line.includes('┌─ PHONE CARD') ||
-                /(samsung|iphone|oneplus|xiaomi|oppo|vivo|realme|motorola).*₹\d+/i.test(line)
-            ).length;
-            
-            phoneCount = Math.max(1, phoneIndicators);
-
-            return `
-                <div class="flex items-center justify-between mb-8 slide-in">
+                <div class="flex items-center justify-between mb-8">
                     <h2 class="text-3xl font-bold text-white section-title">
-                        <i class="fas fa-mobile-alt mr-3"></i>
-                        ${title}
+                        <i class="fas fa-lightbulb mr-3 text-yellow-400"></i> Expert Analysis
                     </h2>
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                        ${phoneCount} Phones Found
-                    </div>
                 </div>
-            `;
-        }
-
-        function parseNumberedList(lines) {
-            let html = '';
-            let currentPhone = null;
-            let phoneCount = 0;
-
-            lines.forEach((line, index) => {
-                const phoneMatch = line.match(/^(\d+)\.\s+(.+?)\s*\(?Selling Price:?\s*₹?([\d,]+)\)?/i);
-                
-                if (phoneMatch) {
-                    if (currentPhone) {
-                        html += currentPhone + '</div></div>';
-                    }
-                    
-                    phoneCount++;
-                    const [, number, model, price] = phoneMatch;
-                    currentPhone = `
-                        <div class="phone-card rounded-2xl p-6 fade-in mb-8" style="animation-delay: ${phoneCount * 0.1}s">
-                            <div class="flex justify-between items-start mb-6">
-                                <div class="flex items-center">
-                                    <div class="result-counter text-white mr-4">${number}</div>
-                                    <h3 class="text-xl font-bold text-white">${model.trim()}</h3>
-                                </div>
-                                <div class="price-tag">₹${price}</div>
-                            </div>
-                            <div class="specs-grid">
-                    `;
-                } else if (line.includes(':') && currentPhone) {
-                    const [key, value] = line.split(':').map(s => s.trim());
-                    if (key && value) {
-                        currentPhone += `
-                            <div class="spec-item">
-                                <div class="spec-label">${key}</div>
-                                <div class="spec-value">${value}</div>
-                            </div>
-                        `;
-                    }
-                }
-            });
-
-            if (currentPhone) {
-                html += currentPhone + '</div></div>';
-            }
-
-            return html;
-        }
-
-        function parseFreeTextPhones(lines) {
-            let html = '';
-            let currentPhone = [];
-            let phoneCount = 0;
-
-            lines.forEach((line, index) => {
-                const trimmed = line.trim();
-                
-                const isPhoneLine = /(samsung|iphone|oneplus|xiaomi|oppo|vivo|realme|motorola|poco|nokia|asus|lg|sony)/i.test(trimmed) ||
-                                   /₹\d+[,]?\d+/.test(trimmed) ||
-                                   /\d+GB\s+(RAM|Storage)/i.test(trimmed);
-
-                if (isPhoneLine && trimmed.length > 10) {
-                    if (currentPhone.length > 0) {
-                        phoneCount++;
-                        html += createSimplePhoneCard(currentPhone, phoneCount);
-                        currentPhone = [];
-                    }
-                    currentPhone.push(trimmed);
-                } else if (currentPhone.length > 0 && trimmed.length > 5) {
-                    currentPhone.push(trimmed);
-                }
-            });
-
-            if (currentPhone.length > 0) {
-                phoneCount++;
-                html += createSimplePhoneCard(currentPhone, phoneCount);
-            }
-
-            return html;
-        }
-
-        function createSimplePhoneCard(phoneLines, phoneNumber) {
-            const title = phoneLines[0] || 'Smartphone';
-            const specs = phoneLines.slice(1).filter(line => line.length > 5);
-            
-            return `
-                <div class="phone-card rounded-2xl p-6 fade-in mb-8" style="animation-delay: ${phoneNumber * 0.1}s">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center">
-                            <div class="result-counter text-white mr-4">${phoneNumber}</div>
-                            <h3 class="text-xl font-bold text-white">${title}</h3>
-                        </div>
-                    </div>
-                    <div class="specs-grid">
-                        ${specs.map(spec => {
-                            const colonIndex = spec.indexOf(':');
-                            if (colonIndex > -1) {
-                                const key = spec.substring(0, colonIndex).trim();
-                                const value = spec.substring(colonIndex + 1).trim();
-                                return `
-                                    <div class="spec-item">
-                                        <div class="spec-label">${key}</div>
-                                        <div class="spec-value">${value}</div>
-                                    </div>
-                                `;
-                            } else {
-                                return `
-                                    <div class="spec-item">
-                                        <div class="spec-label">Feature</div>
-                                        <div class="spec-value">${spec}</div>
-                                    </div>
-                                `;
-                            }
-                        }).join('')}
-                    </div>
-                    <div class="mt-6 pt-5 border-t border-gray-600/50">
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-400 text-sm font-medium">Verified Data</span>
-                            <button onclick="searchFlipkart('${title}')" class="flipkart-button text-white font-semibold py-3 px-6 rounded-xl flex items-center transition-all duration-300 text-sm">
-                                <i class="fas fa-external-link-alt mr-2"></i>
-                                View on Flipkart
+                <div class="purple-glass-block rounded-2xl p-6">
+                    ${s.summary ? `<div class="mb-6"><h3 class="text-base font-bold text-white mb-3 flex items-center"><i class="fas fa-info-circle text-blue-400 mr-2 text-sm"></i> Summary</h3><p class="text-gray-200 text-base leading-relaxed">${s.summary}</p></div>` : ''}
+                    ${s.details ? `<div class="mb-4"><h3 class="text-base font-bold text-white mb-3 flex items-center"><i class="fas fa-chart-bar text-green-400 mr-2 text-sm"></i> Detailed Analysis</h3><div class="explanation-content">${parseExplanationDetails(s.details)}</div></div>` : '<div class="text-gray-400 text-base p-3 bg-gray-800/50 rounded-lg">No detailed analysis.</div>'}
+                </div>
+                ${s.recommendation ? `<div class="recommendation-block rounded-2xl p-5 mt-6"><h3 class="text-base font-bold text-white mb-3 flex items-center"><i class="fas fa-star text-yellow-400 mr-2 text-sm"></i> Final Recommendation</h3><p class="text-gray-200 text-base leading-relaxed font-medium">${s.recommendation}</p></div>` : ''}
+                <div class="mt-8 pt-6 border-t border-gray-600/50">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400 text-sm"><i class="fas fa-robot mr-2 text-indigo-400"></i> AI-powered analysis</span>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="copyRecommendation()" class="text-gray-300 hover:text-white text-sm font-medium flex items-center" title="Copy full analysis">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                            <button onclick="clearSession()" class="text-red-400 hover:text-red-300 text-sm font-medium flex items-center" title="Clear past interactions">
+                                <i class="fas fa-trash-alt mr-1"></i> Clear History
                             </button>
                         </div>
                     </div>
                 </div>
-            `;
-        }
+            </div>
+        `;
+    }
 
-        function formatTextResponse(text) {
-            return text
-                .split('\n')
-                .map(line => {
-                    const trimmed = line.trim();
-                    if (!trimmed) return '<br>';
-                    if (/^[•\-]\s/.test(trimmed)) {
-                        return `<div class="flex items-start mb-3">
-                            <i class="fas fa-circle text-xs text-indigo-400 mt-2 mr-3 flex-shrink-0"></i>
-                            <span class="text-gray-300">${trimmed.substring(2)}</span>
-                        </div>`;
-                    }
-                    return `<p class="mb-4 text-gray-300">${trimmed}</p>`;
-                })
-                .join('');
-        }
-
-        function showNotification(message, type) {
-            const existingNotification = document.querySelector('.notification');
-            if (existingNotification) {
-                existingNotification.remove();
+    // =============== CARD VIEW ===============
+    function createCardsView(content) {
+        const lines = content.split('\n').filter(l => l.trim());
+        let html = '';
+        const cardRegex = /┌─ ([^─]+) ─+┐(.*?)└─+┘/gs;
+        const cards = [];
+        let match;
+        while ((match = cardRegex.exec(content)) !== null) {
+            const title = match[1].trim();
+            const body = match[2];
+            const cardLines = body.split('│').map(l => l.trim()).filter(l => l && !l.includes('─') && !l.includes('┌') && !l.includes('└'));
+            if (cardLines.length > 0) {
+                cardLines.unshift(`Title: ${title}`);
+                cards.push(cardLines);
             }
-
-            const notification = document.createElement('div');
-            notification.className = `notification fixed top-6 right-6 z-50 px-6 py-4 rounded-2xl shadow-2xl transform transition-all duration-300 ${
-                type === 'error' ? 'bg-red-500' : 'bg-gradient-to-r from-green-500 to-emerald-600'
-            } text-white font-semibold slide-in`;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => notification.remove(), 300);
-            }, 4000);
         }
-
-        // Event listeners
-        document.getElementById('queryInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                fetchRecommendations();
-            }
-        });
-
-        document.getElementById('queryInput').addEventListener('focus', function() {
-            this.parentElement.classList.add('ring-2', 'ring-indigo-500', 'ring-opacity-50');
-        });
-
-        document.getElementById('queryInput').addEventListener('blur', function() {
-            this.parentElement.classList.remove('ring-2', 'ring-indigo-500', 'ring-opacity-50');
-        });
-
-        // Add some interactive elements
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add subtle animation to stats cards
-            const statsCards = document.querySelectorAll('.stats-card');
-            statsCards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.2}s`;
-                card.classList.add('fade-in');
+        if (cards.length > 0) {
+            window.lastParsedCards = cards;
+            html += createResultsHeader('Recommended Phones', cards.length);
+            html += `<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">`;
+            cards.forEach((cardLines, idx) => {
+                html += createPhoneCardFromLines(cardLines, idx + 1, idx);
             });
+            html += '</div>';
+        } else {
+            html += createResultsHeader('Recommended Phones', lines);
+            html += `<div class="text-center py-8"><div class="glass-card rounded-2xl p-8"><i class="fas fa-info-circle text-4xl text-blue-400 mb-4"></i><h3 class="text-xl font-bold text-white mb-2">Product Information</h3><div class="text-gray-300 text-left mt-4">${formatTextResponse(content)}</div></div></div>`;
+        }
+        return html;
+    }
+
+    function createPhoneCardFromLines(cardLines, num, idx) {
+        let model = 'Phone Model', price = 'Price not available', specs = [];
+        cardLines.forEach(line => {
+            if (line.toLowerCase().includes('title:')) {
+                const t = line.replace(/title:/gi, '').trim();
+                if (!t.toLowerCase().includes('phone card') && !t.toLowerCase().includes('best camera')) model = t;
+            } else if (line.toLowerCase().includes('model:')) model = line.replace(/model:/gi, '').trim();
+            else if (line.toLowerCase().includes('price:')) price = line.replace(/price:/gi, '').trim();
+            else if (line.includes(':') && !line.toLowerCase().includes('title:')) specs.push(line);
         });
-    </script>
+        specs = specs.map(s => s.replace('Rating: Rating:', 'Rating:'));
+        return `
+            <div class="phone-card rounded-2xl p-6 fade-in" style="animation-delay: ${idx * 0.1}s">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="flex items-center">
+                        <div class="result-counter text-white mr-4">${num}</div>
+                        <h3 class="text-xl font-bold text-white">${model}</h3>
+                    </div>
+                    <div class="price-tag">${price}</div>
+                </div>
+                <div class="specs-grid">
+                    ${specs.map(spec => {
+                        const [k, v] = spec.split(':').map(s => s.trim());
+                        if (!k || !v) return '';
+                        return `<div class="spec-item"><div class="spec-label">${k}</div><div class="spec-value">${v}</div></div>`;
+                    }).join('')}
+                </div>
+                <div class="mt-6 pt-5 border-t border-gray-600/50">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-sm font-medium">Verified Data</span>
+                        <button onclick="searchFlipkart('${model}')" class="flipkart-button font-semibold py-3 px-6 rounded-xl flex items-center transition-all duration-300 text-sm">
+                            <i class="fas fa-external-link-alt mr-2"></i> View on Flipkart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function createResultsHeader(title, count) {
+        let n = count;
+        if (typeof count === 'string' || Array.isArray(count)) {
+            const txt = Array.isArray(count) ? count.join(' ') : String(count);
+            n = (txt.match(/┌─/g) || []).length || (txt.match(/└─/g) || []).length || 1;
+        }
+        if (window.lastParsedCards?.length) n = window.lastParsedCards.length;
+        if (!n) n = 1;
+        return `
+            <div class="flex items-center justify-between mb-8 slide-in">
+                <h2 class="text-3xl font-bold text-white section-title">
+                    <i class="fas fa-mobile-alt mr-3"></i> ${title}
+                </h2>
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                    ${n} ${n === 1 ? 'Phone' : 'Phones'} Found
+                </div>
+            </div>
+        `;
+    }
+
+    function formatTextResponse(text) {
+        const lines = text.split('\n').filter(l => l.trim());
+        const paragraphs = [];
+        let current = '';
+        const headers = ['Direct Answer:', 'Expert Opinion and Recommendations:', 'Key Tradeoffs and Considerations:', 'Who Each Option is Best For:', 'Limitations and Drawbacks:', 'Actionable Recommendation:', 'Price Comparison:', 'Final Verdict:', 'Summary:', 'Conclusion:'];
+        lines.forEach(line => {
+            const t = line.trim();
+            if (!t) return;
+            if (t.endsWith(':') && t.length < 50 && headers.some(h => t === h)) {
+                if (current) {
+                    paragraphs.push({ type: 'paragraph', content: current });
+                    current = '';
+                }
+                paragraphs.push({ type: 'header', content: t });
+            } else {
+                if (current) current += ' ';
+                current += t;
+            }
+        });
+        if (current) paragraphs.push({ type: 'paragraph', content: current });
+        return paragraphs.map(item => {
+            if (item.type === 'header') return `<h3 class="text-xl font-bold text-white mt-8 mb-4 border-l-4 border-purple-500 pl-4">${item.content}</h3>`;
+            const imp = item.content.toLowerCase();
+            if (imp.includes('recommend') || imp.includes('suggest') || imp.includes('verdict') || imp.includes('final') || imp.includes('conclusion') || (imp.includes('better') && item.content.length < 150)) {
+                return `<div class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-6 rounded-xl my-4 border-l-4 border-purple-500"><p class="text-gray-300 leading-relaxed font-medium">${item.content}</p></div>`;
+            }
+            return `<p class="text-gray-300 leading-relaxed mb-4">${item.content}</p>`;
+        }).join('');
+    }
+
+    // =============== EVENT LISTENERS ===============
+    document.getElementById('queryInput').addEventListener('keypress', e => {
+        if (e.key === 'Enter') fetchRecommendations();
+    });
+    document.getElementById('queryInput').addEventListener('focus', function() {
+        this.parentElement.classList.add('ring-2', 'ring-indigo-500', 'ring-opacity-50');
+    });
+    document.getElementById('queryInput').addEventListener('blur', function() {
+        this.parentElement.classList.remove('ring-2', 'ring-indigo-500', 'ring-opacity-50');
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.stats-card').forEach((card, i) => {
+            card.style.animationDelay = `${i * 0.2}s`;
+            card.classList.add('fade-in');
+        });
+    });
+
+    function displayResults(answer, container, outputFormat) {
+        let clean = answer
+            .replace(/\*\*/g, '')
+            .replace(/\*/g, '')
+            .replace(/Memory: nan/g, 'Memory: Not specified')
+            .replace(/Rating: nan/g, 'Rating: Not rated')
+            .replace(/Price: ₹nan/g, 'Price: Not available')
+            .replace(/Color: nan/g, 'Color: Various')
+            .replace(/\s*\n\s*\n\s*/g, '\n')
+            .replace(/ +/g, ' ')
+            .trim();
+        container.innerHTML = outputFormat === 'explanation' ? createExplanationView(clean) : createCardsView(clean);
+        setTimeout(() => document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' }), 500);
+    }
+</script>
 </body>
 </html>
