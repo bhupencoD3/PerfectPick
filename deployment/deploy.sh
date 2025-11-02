@@ -5,7 +5,7 @@ set -e
 echo "🚀 Deploying PerfectPick Demo..."
 
 # Create namespace if it doesn't exist
-kubectl apply -f k8s/01-namespace.yaml
+kubectl apply -f k8s/namespace.yaml
 
 # Create secret from environment variables (if provided)
 if [ ! -f "k8s/02-secret.yaml" ]; then
@@ -27,10 +27,10 @@ EOF
 fi
 
 # Apply all k8s manifests in order
-kubectl apply -f k8s/02-secret.yaml
-kubectl apply -f k8s/03-configmap.yaml
-kubectl apply -f k8s/04-deployment.yaml
-kubectl apply -f k8s/05-service.yaml
+kubectl apply -f k8s/secret.yaml
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
 
 # Wait for deployment to be ready
 echo "⏳ Waiting for deployment to be ready..."
