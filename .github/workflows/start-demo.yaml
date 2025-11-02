@@ -1,0 +1,37 @@
+name: 🚀 Start Demo Environment
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  start-demo:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Start Minikube
+      run: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        sudo install minikube-linux-amd64 /usr/local/bin/minikube
+        minikube start --driver=docker --force
+
+    - name: Build and Load Docker Image
+      run: |
+        docker build -t perfectpick-app:latest .
+        minikube image load perfectpick-app:latest
+
+    - name: Deploy Application
+      run: |
+        cd deployment
+        chmod +x deploy.sh
+        ./deploy.sh
+        
+    - name: Get Application URL
+      run: |
+        echo "🎯 Your demo is now running!"
+        echo "📱 Application URL:"
+        minikube service perfectpick-service -n perfectpick --url
+        echo ""
+        echo "💡 To stop the demo, run the 'Stop Demo Environment' workflow"

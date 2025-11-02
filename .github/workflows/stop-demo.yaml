@@ -1,0 +1,35 @@
+name: 🛑 Stop Demo
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  stop-demo:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Stop Demo Environment
+      run: |
+        # Start Minikube to access cluster
+        minikube start --driver=docker 2>/dev/null || true
+        
+        # Teardown application
+        cd deployment
+        chmod +x teardown.sh
+        ./teardown.sh
+        
+        # Stop and delete Minikube to save resources
+        minikube stop
+        minikube delete
+        
+    - name: Cleanup Confirmation
+      run: |
+        echo "✅ Demo environment stopped successfully!"
+        echo "💵 No costs incurred while stopped"
+        echo ""
+        echo "🔜 When ready to use again:"
+        echo "   - Push code to trigger auto-deploy OR"
+        echo "   - Run manual start workflow"

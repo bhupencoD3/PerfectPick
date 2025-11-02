@@ -1,0 +1,44 @@
+name: 🚀 Auto Deploy on Push
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Minikube
+      run: |
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        sudo install minikube-linux-amd64 /usr/local/bin/minikube
+        minikube start --driver=docker --force
+
+    - name: Build and Load Docker Image
+      run: |
+        docker build -t perfectpick-app:latest .
+        minikube image load perfectpick-app:latest
+
+    - name: Deploy Application
+      run: |
+        cd deployment
+        chmod +x deploy.sh
+        ./deploy.sh
+
+    - name: Health Check
+      run: |
+        kubectl wait --for=condition=ready pod -l app=perfectpick-api -n perfectpick --timeout=180s
+        echo "✅ Deployment successful and healthy!"
+
+    - name: Show Access Info
+      run: |
+        echo "🎯 Application deployed successfully!"
+        echo "📱 Access your application:"
+        minikube service perfectpick-service -n perfectpick --url
+        echo ""
+        echo "💡 Remember to stop the demo when not in use:"
+        echo "   Go to Actions → '🛑 Stop Demo' workflow"
