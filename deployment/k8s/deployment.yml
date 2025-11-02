@@ -6,7 +6,7 @@ metadata:
   labels:
     app: perfectpick-api
 spec:
-  replicas: 3
+  replicas: 1  # Single replica for demo
   selector:
     matchLabels:
       app: perfectpick-api
@@ -14,10 +14,6 @@ spec:
     metadata:
       labels:
         app: perfectpick-api
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8000"
-        prometheus.io/path: "/metrics"
     spec:
       containers:
       - name: perfectpick
@@ -73,11 +69,11 @@ spec:
               key: ASTRA_DB_COLLECTION_NAME
         resources:
           requests:
-            memory: "1Gi"
-            cpu: "500m"
+            memory: "512Mi"  # Reduced for demo
+            cpu: "250m"      # Reduced for demo
           limits:
-            memory: "2Gi"
-            cpu: "1000m"
+            memory: "1Gi"    # Reduced for demo
+            cpu: "500m"      # Reduced for demo
         livenessProbe:
           httpGet:
             path: /health
