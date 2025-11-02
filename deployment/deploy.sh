@@ -8,9 +8,9 @@ echo "🚀 Deploying PerfectPick Demo..."
 kubectl apply -f k8s/namespace.yaml
 
 # Create secret from environment variables (if provided)
-if [ ! -f "k8s/02-secret.yaml" ]; then
+if [ ! -f "k8s/secret.yaml" ]; then
     echo "⚠️  Secret file not found. Creating from template..."
-    cat > k8s/02-secret.yaml << EOF
+    cat > k8s/secret.yaml << EOF
 apiVersion: v1
 kind: Secret
 metadata:
