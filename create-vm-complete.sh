@@ -50,10 +50,10 @@ echo "✅ Project set to: $(gcloud config get-value project)"
 
 # Create the VM with e2-small using inline startup script
 gcloud compute instances create $VM_NAME \
-    --machine-type=e2-small \
+    --machine-type=e2-medium \
     --image-family=ubuntu-2204-lts \
     --image-project=ubuntu-os-cloud \
-    --boot-disk-size=20GB \
+    --boot-disk-size=30GB \
     --boot-disk-type=pd-standard \
     --zone=$ZONE \
     --tags=http-server \
