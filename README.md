@@ -50,7 +50,7 @@ PerfectPick is an end-to-end recommendation system that processes user queries (
   * Developed on branch `feat/production-flask-api`.
   * Core functionality (ingestion, retrieval, API) complete.
   * Supabase connectivity stabilized with **IPv4/IPv6 fallback**.
-  * Live deployment: [http://34.14.203.32:8080/](http://34.14.203.32:8080/).
+  * Live deployment: [http://136.116.202.138/](http://136.116.202.138/).
 
 -----
 
@@ -332,7 +332,7 @@ bhupencoD3-PerfectPick/
 ## Deployment Workflow
 
 **Overview:**
-PerfectPick is deployed on **GCP** using **Google Kubernetes Engine (GKE)** for orchestration, **Artifact Registry** for images, **Secret Manager** for credentials, and **Cloud Build** for CI/CD. The live instance is accessible at **[http://34.14.203.32:8080/](http://34.14.203.32:8080/)**.
+PerfectPick is deployed on **GCP** using **Google Kubernetes Engine (GKE)** for orchestration, **Artifact Registry** for images, **Secret Manager** for credentials, and **Cloud Build** for CI/CD. The live instance is accessible at **[http://136.116.202.138/](http://136.116.202.138/)**.
 
 **Steps:**
 
@@ -361,7 +361,7 @@ PerfectPick is deployed on **GCP** using **Google Kubernetes Engine (GKE)** for 
     kubectl get pods
     kubectl port-forward service/perfectpick-service 8080:80
     ```
-7.  **Access**: [http://34.14.203.32:8080/](http://34.14.203.32:8080/)
+7.  **Access**: [http://136.116.202.138/](http://136.116.202.138/)
 8.  **Scale**:
     ```bash
     kubectl scale deployment perfectpick --replicas=3
